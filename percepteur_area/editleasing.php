@@ -1,0 +1,249 @@
+<!DOCTYPE>
+<?php
+include("includes/db.php");
+if(isset($_GET['edit_leasing']))
+{
+	
+	$get_id=$_GET['edit_leasing'];
+	$get_m=mysql_query("SELECT leasing.leasing_id,leasing.due_amount,leasing.member_id,leasing.moto_id,leasing.cid,contractperiod.periodname,member.fname,member.lname,moto.plate_number FROM leasing  JOIN member   ON leasing.member_id = member.member_id JOIN moto  ON leasing.moto_id = moto.moto_id JOIN contractperiod  ON leasing.cid = contractperiod.cid  WHERE leasing.leasing_id='$get_id'");
+	
+	if($row_m=mysql_fetch_array($get_m)){
+	
+                $id=$row_m['leasing_id'];
+				$platen=$row_m['plate_number'];
+                $fn=$row_m['fname'];
+				$ln=$row_m['lname'];
+				$mid=$row_m['member_id'];
+				$tid=$row_m['moto_id'];
+				$cid=$row_m['cid'];
+                $damount=$row_m['due_amount'];
+				$per=$row_m['periodname'];
+                
+	}		
+}
+?>
+
+<html>
+<head>
+<title> COTAMONYA MIS</title>
+<link  rel="stylesheet" href="styles/style.css"  type="text/css" />
+<link  rel="stylesheet" href="styles/styles.css"  type="text/css" />
+</head>
+<body>
+<!-- Main container starts here-->
+<div class="main_wrapper">
+<div class="header_wrapper">
+<img src="images/cotabana.jpg"/ width="1100px" height="85px" >
+</div>
+<!-- Header ends here-->
+<!-- Navigation Bar starts here-->
+<div class="menubar">
+<div id ="nav">
+<div id="nav_wrapper">
+<ul >
+<li><a href="index2.php">Home</a></li>
+   <li><a href="#">Member </a>
+  
+   
+   
+   
+   </li>
+   <li><a href="leasing.php">Leasing <img src="arrow_down.png"/></a>
+    <ul >
+             
+             <li><a href="viewleasing.php">View Leasing</a></li>
+             
+             </ul>
+   
+   </li>
+   <li><a href="moto.php">Moto <img src="arrow_down.png"/></a>
+			<ul>
+			<li><a href="viewmoto.php">View Motos</a></li>
+             <li><a href="supplier.php">Supplier</a></li>
+             <li><a href="model.php">Model</a></li>
+             </ul>
+         </li>
+  
+<li><a href="#">Paymenttypes  </a>
+
+
+</li>
+<li><a href="viewmotopayment.php">Payments <img src="arrow_down.png"/></a>
+<ul>
+			
+             <li><a href="viewmotopayment.php">View Moto_Payments</a></li>
+             </ul>
+</li>
+<li><a href="index.php">Reports <img src="arrow_down.png"/></a>
+<ul >
+             <li><a href="#">Members Report </a>
+			 </li>
+             <li><a href="reportmotopayment.php">Moto payments Report<span><img src="arrow_right.png"/></span> </a>
+			 <ul>
+											
+                                              <li><a href="requestcustommotopay.php">Request custom Moto Payment report </a></li>
+											</ul>
+			 
+			 
+			 </li>
+			 <li><a href="reportleasingcontract.php">Leasing contract Report</a></li>
+             <li><a href="#">Payments Report </a>
+			 </li>
+			
+			  
+             </ul>
+
+
+</li>
+<li><a href="#">Sign Up </a>
+
+</li>
+<li><a href="logout.php">Logout</a></li>
+</ul>
+</div>
+
+</div>
+
+</div>
+<!-- Navigation Bar ends-->
+<!-- Content wrappper starts -->
+<div class="content_wrapper"> 
+<div id="content_area">
+<form method="post" action="" enctype="multipart/form-data">
+
+<table align="center" cellspacing="20px">
+<tr align="center">
+<td colspan="8"><u><h2>Update Leasing contract  </h2></u> </td>
+</tr>
+<tr>
+<td>Name:</td>
+<td>
+<select name="nam"  >
+<option value="<?php echo $mid  ;?>"><?php echo $fn  ;?> <?php echo $ln  ;?></option>
+<?php
+$get_member="select member_id,fname,lname,function from member where member_id NOT IN (select member_id from leasing) and function='Driver' " ;
+	$run_member=mysql_query($get_member);
+	while($row_m=mysql_fetch_array($run_member))
+	{
+		$m_id=$row_m['member_id'];
+		$fn=$row_m['fname'];
+		$ln=$row_m['lname'];
+		echo"<option value='$m_id'>$fn $ln</option>";
+	}
+?>
+</select>
+</td>	
+
+
+</tr>
+<tr>
+<td>select a Moto:</td>
+<td>
+<select name="moto" >
+<option value="<?php echo $tid  ;?>"><?php echo    $platen ;?></option>
+<?php
+$get_m="select * from  moto where status ='active' ";
+	$run_m=mysql_query($get_m);
+	while($row_m=mysql_fetch_array($run_m))
+	{
+		$m_id=$row_m['moto_id'];
+		$platen=$row_m['plate_number'];
+		echo"<option value='$m_id'>$platen</option>";
+	}
+?>
+</select>
+</td>	
+
+
+</tr>
+
+<tr>
+<td>Contract_Period : </td>
+<td><select name="periodname" >
+<option value="<?php echo $cid  ;?>"><?php echo  $per ;?> </option>
+<?php
+$get_p="select* from contractperiod ";
+	$run_p=mysql_query($get_p);
+	while($row_p=mysql_fetch_array($run_p))
+	{
+		$pid=$row_p['cid'];
+		$pn=$row_p['periodname'];
+		echo"<option value='$pid'> $pn </option>";
+	}
+?>
+</select>
+</td>
+</tr>
+<tr>
+<td>Amount:</td>
+<td><input type= "text" name ="dueamount" value="<?php echo    $damount ;?>" class="textInput" required ></td>
+</tr>
+
+<tr>
+<td></td></tr>
+<tr align="center">
+<td colspan="4"><input type="submit" id="btns" title="Click Here to save" style="color: #017572;" name="update_leasing" value="Update Contract"/></td>
+<td colspan="4"><a href="viewmoto.php">View Moto</a></td></tr>
+</table>
+</form>
+</div>
+</div>
+<!-- Content wrappper ends -->
+<div id ="footer" >
+Copyright&copy2017 Chrisaime, All Rights Reserved.
+</div>
+</div>
+</body>
+</html>
+<?php
+if(isset($_POST['update_leasing']))
+{ 
+
+	//geting the text data from the field
+	$lid=$id;
+	$m_name = $_POST['nam'];
+	$moto_pnumber = $_POST['moto'];
+	$period = $_POST['periodname'];
+	$start_date= date ('y-m-d');
+	$damount=$_POST['dueamount'];
+	$status= 'activeted';
+	$todate= date ('y-m-d');
+	$today="";
+	$amount="";
+	$End_date="";
+	if($period==1)
+	{
+		
+		$End_date=date('y-m-d', strtotime($today. ' + 360 days'));
+		
+
+	}
+	else if($period==2)
+	{
+		$End_date=date('y-m-d', strtotime($today. ' + 720 days'));
+		
+	}
+	
+	
+	
+	$Add_contract= "update leasing set start_date='$start_date',end_date='$End_date',cid='$period',due_amount='$damount',member_id='$m_name',moto_id='$moto_pnumber',status='$status' where leasing_id='$lid'";
+	$Add_con = mysql_query($Add_contract);
+	$status1= "update leasing set status='disactivated' where end_date <='$todate'";
+	$status2= "update moto set status='leased' where moto_id ='$moto_pnumber' ";
+    $run_status1=mysql_query($status1);
+	$run_status2=mysql_query($status2);
+	if ($Add_con && $run_status1 && $run_status2 ){
+		
+	echo "<script>alert('leasing Contract has been Updated!')</script>"	;
+	
+		
+		echo "<script>window.open('viewleasing.php','_self')</script>";	
+	}
+	
+
+}
+
+
+
+?>
+	

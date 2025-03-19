@@ -1,0 +1,500 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body{
+	padding: 0px;
+	margin: 0px;
+	background:#292931;
+
+}
+#white{
+	background-color:white;
+}
+#login{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);	
+width:auto ;
+padding: 50px;
+border:5px solid #cbcbcb;
+margin: 5px auto;
+padding-top: 50px;
+height:auto;		
+}
+#login h2{
+	text-align:center;
+	color:white;
+	font-family:sans-serif;
+	font-size:35px;
+	
+}
+#login input{
+	display:block;
+	width:320px;
+	height:40px;
+	padding:10px;
+	font-size:14px;
+	font-family:sans-serif;
+	color:white;
+	background:rgba(0,0,0,0.3);
+	outline:none;
+	border:1px solid rgba(0,0,0,0.3);
+	border-radius:5px;
+	box-shadow:inset 0px -5px 45px rgba(100,100,100,0.2),0px 1px 1px rgba(255,255,255,0.2);
+	margin-bottom:10px;
+}
+#login  #login-btn{
+	background:#55acee;
+	font-size:18px;
+	text-align:center;
+	vertical-align:middle;
+	line-height:20px;
+}
+#container{
+	width: 1000px;
+	margin:0px auto;
+}
+/*CSS User registration*/
+#register{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);	
+
+}
+#register h2{
+	text-align:center;
+	color:white;
+	font-family:sans-serif;
+	font-size:35px;
+	
+}
+#register input{
+	
+	width:200px;
+	padding:10px;
+	font-size:14px;
+	font-family:sans-serif;
+	color:black;
+	background:rgba(0,0,0,0.3);
+	outline:none;
+	border:1px solid rgba(0,0,0,0.3);
+	border-radius:5px;
+	box-shadow:inset 0px -5px 45px rgba(100,100,100,0.2),0px 1px 1px rgba(255,255,255,0.2);
+	margin-bottom:10px;
+
+}
+
+#form{
+  float:right;
+padding-top:5px;
+height:20px;  
+}
+.main_wrapper{
+	width: 1100px;
+	height:auto;
+	margin:auto;
+}
+.header_wrapper{
+background-color: gray;
+height: 85px;
+color: white;
+text-align: center;
+width:1100px;
+padding:0px;
+border: solid 2px #fff;
+}
+
+#logo {float: left;}
+#banner{float:right;}
+
+.memubar{
+	padding:0;
+	margin:0;
+	line-height:45px;
+	background-color:#55acee;
+}
+.content_wrapper{
+	width:1100px;
+	height:800px;
+	margin:auto;
+	
+}
+#content_area{
+
+width: 1100px;
+height:800px;
+background-color:#ffffff;
+border-right: solid 2px #000;
+border-left:solid 2px #000;
+border-bottom: solid 2px #000;
+font-family: Arial;
+font-size:22px;
+
+margin-left: auto;
+background: #cccccc url(bg_grad.jpg) fixed;	
+
+}
+#content_area h1{
+	text-align:center;
+	font-size:50px;
+}
+#content_area table{
+	float:center;
+	
+}
+.textInput{
+	margin-top: 2px;
+	height:28px;
+	border:1px solid #5e6e66;
+	font-size: 16px;
+	padding: px;
+	width: 100%;
+}
+
+#moto_box{
+	width:780px;
+text-align:center;
+margin-left:30px;
+margin-bottom:10px;	
+	
+}
+#single_moto{float:left; margin-left:20px;padding:10px;}
+
+
+
+
+#sidebar {
+	width:200px;
+	height: 800px;
+	background-color:black;
+	float: left;
+}
+
+
+td{
+	text-align: center;
+}
+       h2{
+            text-align: center;
+            color: #017572;
+         }
+         h3{
+            text-align: center;
+        color: white;
+         }
+#h1login{
+	text-align:center;
+	color:white;
+	font-family:sans-serif;
+	font-size:35px;
+}
+#footer{
+	width:1100px;
+	height: 50px;
+	background:url(MediumGray.png) fixed;	
+	text-align:center;
+	color:white;
+	font-family:sans-serif;
+	font-size:18px;
+	position:absolute;
+	padding-bottom:0px 0px 0px 0px ;
+	padding-top:0px 34px 0px 0px ;
+	
+}
+#card {
+	
+	box-shadow:10px 10px 10px black;
+   
+border-radius: 25px;
+ max-width: 800px;
+    margin: 5px;
+    text-align: center;	
+   background:url('table-images/patternb.png');
+
+}
+#cardbox{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);	
+width:auto ;
+padding: 50px;
+border:5px solid #cbcbcb;
+margin: 5px auto;
+padding-top: 50px;
+height:auto;		
+}	
+	
+
+
+.container{
+	width:auto;
+	height:auto;
+	margin:0px auto;
+	
+}
+#footer1{
+width:1750px;
+height: 50px;
+background-color:#292931;
+text-align:center;
+color:white;
+font-family:sans-serif;
+font-size:18px;	
+
+}
+.footer2{
+width:100%;
+height: 50px;
+background-color:#292931;
+text-align:center;
+color:white;
+font-family:sans-serif;
+font-size:18px;	
+
+bottom:0px;
+}
+
+#pattern-style-a
+{
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size: 14px;
+	margin: 45px;
+	width: 600px;
+	text-align: left;
+	/*border-collapse: collapse;*/
+	background: url('table-images/pattern.png');
+}
+
+#pattern-style-a thead tr
+{
+	background: url('table-images/pattern-head.png');
+}
+#pattern-style-a th
+{
+	font-size: 14px;
+	font-weight: normal;
+	padding: 8px;
+	border-bottom: 1px solid #fff;
+	color: #039;
+}
+#pattern-style-a td
+{
+	padding: 8px; 
+	border-bottom: 1px solid #fff;
+	color: #669;
+	border-top: 1px solid transparent;
+}
+#pattern-style-a tbody tr:hover td
+{
+	color: #339;
+	background: #fff;
+}
+
+
+#pattern-style-b
+{
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size: 14px;
+	margin: 40px;
+	width: 950px;
+	text-align: left;
+	border-collapse: collapse;
+	background: url('table-images/patternb.png');
+	
+	
+	
+	
+	
+	
+}
+#pattern-style-b thead tr
+{
+	background: url('table-images/patternb-head.png');
+}
+#pattern-style-b th
+{
+	font-size: 15px;
+	font-weight: normal;
+	padding: 8px;
+	border-bottom: 1px solid #fff;
+	color: #039;
+}
+#pattern-style-b td
+{
+	padding: 4px; 
+	border-bottom: 1px solid #fff;
+	color: #669;
+	border-top: 1px solid transparent;
+}
+#pattern-style-b tbody tr:hover td
+{
+	color: #339;
+	background: #cdcdee;
+}
+#hor-minimalist-b
+{
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size: 12px;
+	background: #fff;
+	margin: 20px;
+	width: 1000px;
+	border-collapse: collapse;
+	text-align: center;
+	/*padding-left:30%;*/
+	float:center;
+}
+#hor-minimalist-b th
+{
+	font-size: 14px;
+	font-weight: normal;
+	color: #039;
+	padding: 10px ;
+	border-bottom: 1px solid #6678b1;
+	border-left: 1px solid #6678b1;
+	border-right: 1px solid #6678b1;
+	border-top: 1px solid #6678b1;
+	background:#b9c9fe url('table-images/gradhead.png') repeat-x;
+}
+#hor-minimalist-b td
+{
+	/*border-bottom: 1px solid #ccc;*/
+	border-bottom: 1px solid #6678b1;
+	border-left: 1px solid #6678b1;
+	border-right: 1px solid #6678b1;
+	font-weight: normal;
+	color: #000;
+	padding: 5px 7px;
+	font-size: 12px;
+}
+/*Report leasing*/
+#hor-minimalist-bb
+{
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size: 12px;
+	background: #fff;
+	/*margin: 45px;
+	width: 950px;*/
+	border-collapse: collapse;
+	text-align: center;
+	position:absolute;
+   top:80%;
+   left:50%;
+   transform:translate(-50%,-50%);	
+   width: 950px;
+   padding: 50px;
+   margin: 5px auto;
+  padding-top: 20px;
+  	
+}
+#hor-minimalist-bb th
+{
+	font-size: 14px;
+	font-weight: normal;
+	color: #039;
+	padding: 10px ;
+	border-bottom: 1px solid #6678b1;
+	border-left: 1px solid #6678b1;
+	border-right: 1px solid #6678b1;
+	border-top: 1px solid #6678b1;
+	background:#b9c9fe url('table-images/gradhead.png') repeat-x;
+}
+#hor-minimalist-bb td
+{
+	/*border-bottom: 1px solid #ccc;*/
+	border-bottom: 1px solid #6678b1;
+	border-left: 1px solid #6678b1;
+	border-right: 1px solid #6678b1;
+	font-weight: normal;
+	color: #000;
+	padding: 5px 7px;
+	font-size: 12px;
+}
+#hor-minimalist-bbb
+{
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size: 12px;
+	background: #fff;
+	/*margin: 45px;
+	width: 950px;*/
+	border-collapse: collapse;
+	text-align: center;
+   width:1200px;
+   padding: 50px;
+   margin: 5px auto;
+  padding-top: 20px;
+  	
+}
+#hor-minimalist-bbb th
+{
+	font-size: 14px;
+	font-weight: normal;
+	color: #039;
+	padding: 10px ;
+	border-bottom: 1px solid #6678b1;
+	border-left: 1px solid #6678b1;
+	border-right: 1px solid #6678b1;
+	border-top: 1px solid #6678b1;
+	background:#b9c9fe url('table-images/gradhead.png') repeat-x;
+}
+#hor-minimalist-bbb td
+{
+	/*border-bottom: 1px solid #ccc;*/
+	border-bottom: 1px solid #6678b1;
+	border-left: 1px solid #6678b1;
+	border-right: 1px solid #6678b1;
+	font-weight: normal;
+	color: #000;
+	padding: 5px 7px;
+	font-size: 12px;
+}
+.pull-right {
+  
+  
+}
+.pull-right h4 {
+	font-size:20px;
+	text-align:center;
+}
+@media only screen and (max-width:768px){
+/*#hor-minimalist-b tbody tr:hover td
+{
+	color: #009;
+}*/
+
+
+
+
+
+
+
+

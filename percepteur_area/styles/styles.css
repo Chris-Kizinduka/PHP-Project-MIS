@@ -1,0 +1,134 @@
+body{
+padding: 0;
+margin:0;
+overflow-y:scroll;
+font-family: Arial;
+font-size: 18px;
+
+}
+#nav{
+	background-color: #222;
+
+}
+#nav_wrapper{
+	width:1100px;
+	margin: 0 auto;
+	text-align: left;
+}
+#nav ul{
+	list-style-type:none;
+	padding: 0;
+	margin: 0;
+	position: relative;
+}
+#nav ul li{
+	display: inline-block; 
+}
+#nav ul li:hover{
+background-color: #333;
+}
+#nav ul li img{
+	vertical-align: middle;
+	padding-left: 5px;
+}
+#nav ul li a,visited{
+	color:#ccc;
+	display:block;
+	padding: 15px;
+}
+#nav ul li a:hover{
+	color:#ccc;
+	text-decoration: none;
+}
+#nav ul li:hover > ul{
+display: block;
+
+}
+#nav ul ul{
+	display:none;
+	position:absolute;
+	background-color: #333;
+	border:5px solid #222;
+	border-top: 0; 
+	margin-left: -5px;
+	min-width: 200px;
+}
+#nav ul ul ul{
+	
+	background-color: #333;
+	border:5px solid #222;
+	border-left: 0; 
+	margin-left: 232.9px;
+	min-width: 200px;
+	min-height:80px;
+	top:5px;
+}
+#nav ul ul li{
+	display:block;
+}
+#nav ul ul li a,visited{
+	color:#ccc;
+}
+#nav ul ul li a:hover {
+	color:#099;
+}
+#content_area #btns{
+
+	background: url(button.png) fixed;
+	font-size:16px;
+	text-align:center;
+	vertical-align:middle;
+	line-height:30px;
+	border-radius:5px;
+	
+}
+#hor-minimalist-b
+{
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size: 12px;
+	background: #fff;
+	margin: 45px;
+	width: 480px;
+	border-collapse: collapse;
+	text-align: left;
+}
+#hor-minimalist-b th
+{
+	font-size: 14px;
+	font-weight: normal;
+	color: #039;
+	padding: 15px ;
+	border-bottom: 1px solid #6678b1;
+	border-left: 1px solid #6678b1;
+	border-right: 1px solid #6678b1;
+	border-top: 1px solid #6678b1;
+	background:#b9c9fe url('table-images/gradhead.png') repeat-x;
+}
+#hor-minimalist-b td
+{
+	/*border-bottom: 1px solid #ccc;*/
+	border-bottom: 1px solid #6678b1;
+	border-left: 1px solid #6678b1;
+	border-right: 1px solid #6678b1;
+	font-weight: normal;
+	color: #000;
+	padding: 6px 8px;
+	font-size: 12px;
+}
+.pull-right {
+  text-align:center;
+}
+@media only screen and (max-width:768px){
+
+/*#hor-minimalist-b tbody tr:hover td
+{
+	color: #009;
+}*/
+
+
+
+
+
+
+
+
