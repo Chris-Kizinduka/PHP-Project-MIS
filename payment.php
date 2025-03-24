@@ -1,18 +1,31 @@
 <!DOCTYPE>
+
+
 <?php
 include("includes/db.php");
-if(isset($_GET['pay_type']))
-{
-	
-	$get_id=$_GET['pay_type'];
-	$get_s="select * from payment_types where paymenttypes_id='$get_id'";
-	$run_s=mysql_query($get_s);
-	$row_s=mysql_fetch_array($run_s);
-	$pid=$row_s['paymenttypes_id'];
-    $typename=$row_s['type_name'];
-    $amount_to_pay=$row_s['amount_to_pay'];
-        
 
+if (isset($_GET['pay_type'])) {
+    $get_id = $_GET['pay_type'];
+
+    // Sanitize the input to prevent SQL injection (optional but recommended)
+    $get_id = mysqli_real_escape_string($conn, $get_id);
+
+    // Query to fetch the payment type
+    $get_s = "SELECT * FROM payment_types WHERE paymenttypes_id = '$get_id'";
+
+    // Run the query and check if the query is successful
+    $run_s = mysqli_query($conn, $get_s);
+
+    if ($run_s && mysqli_num_rows($run_s) > 0) {
+        // Fetch the data
+        $row_s = mysqli_fetch_array($run_s);
+        $pid = $row_s['paymenttypes_id'];
+        $typename = $row_s['type_name'];
+        $amount_to_pay = $row_s['amount_to_pay'];
+    } else {
+        echo "No record found for the given ID.";
+    }
+}
 ?>
 <html>
 <head>
@@ -143,16 +156,26 @@ if(isset($_GET['pay_type']))
 <select name="nam" >
 <option></option>
 <?php
-$get_member="select*from member";
-	$run_member=mysql_query($get_member);
-	while($row_m=mysql_fetch_array($run_member))
-	{
-		$m_id=$row_m['member_id'];
-		$fn=$row_m['fname'];
-		$ln=$row_m['lname'];
-		echo"<option value='$m_id'>$fn $ln</option>";
-	}
+// Assuming you've already connected to the database as $conn
+$get_member = "SELECT * FROM member";
+$run_member = mysqli_query($conn, $get_member);
+
+// Check if query is successful
+if ($run_member) {
+    // Loop through the results
+    while ($row_m = mysqli_fetch_assoc($run_member)) {
+        $m_id = htmlspecialchars($row_m['member_id']);  // Prevent XSS attacks
+        $fn = htmlspecialchars($row_m['fname']);
+        $ln = htmlspecialchars($row_m['lname']);
+        
+        // Output the member as an option in a dropdown
+        echo "<option value='$m_id'>$fn $ln</option>";
+    }
+} else {
+    echo "Error: " . mysqli_error($conn);  // Display error if the query fails
+}
 ?>
+
 </select>
 </td>	
 </tr>
@@ -180,36 +203,33 @@ Copyright&copy2017 Chrisaime, All Rights Reserved.
 </body>
 </html>
 <?php
-if(isset($_POST['p_btn'])){
-	//getting the text data from the fields
-	
-	$mid=$_POST['nam'];
-	$Amount=$_POST['paidamount'];
-	$typen=$pid;
-	$desc=$_POST['descr'];
-	
-	if($Amount<$amount_to_pay) {
-		
-		
-echo "<script>alert('the amount paid is below ')</script>";
-		 
-break;	
-}
-		else{
-	$insert_p="insert into payment(amount,p_date,description,paymenttypes_id,member_id) 
-	values('$Amount',Now(),'$desc','$typen','$mid')";
-	
-	$insert_pt=mysql_query($insert_p);
-	if($insert_pt){
-		
-	echo"<script> alert('payment  Has been Inserted!')</script>";
+// Assuming $conn is your already established MySQLi connection
+if (isset($_POST['p_btn'])) {
+    // Get text data from the fields
+    $mid = $_POST['nam'];
+    $Amount = $_POST['paidamount'];
+    $typen = $pid;
+    $desc = $_POST['descr'];
 
-	}
+    // Check if the amount paid is below the required amount
+    if ($Amount < $amount_to_pay) {
+        echo "<script>alert('The amount paid is below the required amount.')</script>";
+        exit();  // Exit the script as the amount is insufficient
+    } else {
+        // Insert the payment into the database
+        $insert_p = "INSERT INTO payment(amount, p_date, description, paymenttypes_id, member_id) 
+                     VALUES('$Amount', NOW(), '$desc', '$typen', '$mid')";
+
+        // Execute the query
+        if (mysqli_query($conn, $insert_p)) {
+            echo "<script>alert('Payment has been inserted!')</script>";
+        } else {
+            echo "<script>alert('Error inserting payment.')</script>";
+        }
+    }
 }
-}
-	
-?>	
-<?php } ?>
+?>
+
 
 
 

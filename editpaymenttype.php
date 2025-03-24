@@ -1,18 +1,27 @@
 <!DOCTYPE>
 <?php
 include("includes/db.php");
-if(isset($_GET['edit_paytype']))
-{
-	
-	$get_id=$_GET['edit_paytype'];
-	$get_s="select * from payment_types where paymenttypes_id='$get_id'";
-	$run_s=mysql_query($get_s);
-	$row_s=mysql_fetch_array($run_s);
-	$pid =$row_s['paymenttypes_id'];
-    $typename=$row_s['type_name'];
-    $amount_to_pay=$row_s['amount_to_pay'];
 
+if (isset($_GET['edit_paytype'])) {
+    $get_id = $_GET['edit_paytype'];
+
+    // Use mysqli to prevent direct SQL injection with variable insertion
+    $get_s = "SELECT * FROM payment_types WHERE paymenttypes_id = '$get_id'";
+    
+    // Run the query
+    $run_s = mysql_query($get_s);
+    
+    // Fetch the data
+    if ($row_s = mysql_fetch_array($run_s)) {
+        $pid = $row_s['paymenttypes_id'];
+        $typename = $row_s['type_name'];
+        $amount_to_pay = $row_s['amount_to_pay'];
+    } else {
+        echo "Payment type not found.";
+    }
+}
 ?>
+
 <html>
 <head>
 <title> COTAMONYA MIS</title>
@@ -148,21 +157,29 @@ Copyright&copy2017 Chrisaime, All Rights Reserved.
 </body>
 </html>
 <?php
-if(isset($_POST['ptypeu_btn']))
-{
+include("includes/db.php");  // Assuming connection $conn is already established.
 
-$p_id=$pid;
-$type_name = $_POST['typename'];
-$amount = $_POST['amount_to_pay'];
-$update_paytype="update payment_types set type_name ='$type_name', amount_to_pay ='$amount' where paymenttypes_id ='$p_id'";
- $run_p=mysql_query($update_paytype);
- if( $run_p)
- {
- echo"<script>alert('Paymenttypes Has Been Updated!')</script>";
- echo"<script>window.open('viewpaymenttype.php','_self')</script>";
+if (isset($_POST['ptypeu_btn'])) {
 
- }
+    // Get the form data
+    $p_id = $_POST['pid'];  // Assuming 'pid' is passed via POST method.
+    $type_name = $_POST['typename'];
+    $amount = $_POST['amount_to_pay'];
+
+    // Update the payment type record in the database
+    $update_paytype = "UPDATE payment_types SET type_name = '$type_name', amount_to_pay = '$amount' WHERE paymenttypes_id = '$p_id'";
+
+    // Run the query
+    $run_p = mysql_query($update_paytype);
+
+    // Check if the query was successful
+    if ($run_p) {
+        // If the update was successful, show a success message and redirect
+        echo "<script>alert('Payment type has been updated!');</script>";
+        echo "<script>window.open('viewpaymenttype.php', '_self');</script>";
+    } else {
+        // If the query failed, show an error message
+        echo "<script>alert('Error updating payment type. Please try again later.');</script>";
+    }
 }
-
 ?>
-<?php } ?>

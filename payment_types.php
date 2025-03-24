@@ -137,21 +137,26 @@ Copyright&copy2017 Chrisaime, All Rights Reserved.
 </body>
 </html>
 <?php
-if(isset($_POST['ptype_btn'])){
-	//getting the text data from the fields
-	$Typename=$_POST['typename'];
-	$Amount=$_POST['amount_to_pay'];
-	
-	$insert_paytype="insert into payment_types(type_name,amount_to_pay) 
-	values('$Typename','$Amount')";
-	
-	$insert_pt=mysql_query($insert_paytype);
-	if($insert_pt){
-		
-	echo"<script> alert('payment type Has been Inserted!')</script>";
- echo"<script>window.open('payment_types.php?insert_paytype','_self')</script>";
-	}
-}
+if (isset($_POST['ptype_btn'])) {
+    // Getting the text data from the fields
+    $Typename = $_POST['typename'];
+    $Amount = $_POST['amount_to_pay'];
 
+    // Prepare the query using MySQLi
+    $insert_paytype = $conn->prepare("INSERT INTO payment_types (type_name, amount_to_pay) VALUES (?, ?)");
+    $insert_paytype->bind_param("si", $Typename, $Amount); // "si" indicates the types (string, integer)
+    
+    // Execute the query
+    if ($insert_paytype->execute()) {
+        echo "<script> alert('Payment type has been inserted!');</script>";
+        echo "<script>window.open('payment_types.php?insert_paytype','_self');</script>";
+    } else {
+        echo "<script> alert('Error inserting payment type.');</script>";
+    }
+
+    // Close the statement
+    $insert_paytype->close();
+}
 ?>
+
 

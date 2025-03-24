@@ -125,15 +125,18 @@ include("includes/db.php");
 <select name="supplier">
 <option>Select a supplier</option>
 <?php
-$get_sup="select supplier_id, suppliername from supplier";
-	$run_sup=mysql_query($get_sup);
-	while($row_sup=mysql_fetch_array($run_sup))
-	{
-		$sup_id=$row_sup['supplier_id'];
-		$nme=$row_sup['suppliername'];
-		echo"<option value='$sup_id'>$nme</option>";
-	}
+$get_sup = "SELECT supplier_id, suppliername FROM supplier";
+
+// Make sure you are using the correct database connection ($conn)
+$run_sup = mysqli_query($conn, $get_sup);
+
+while ($row_sup = mysqli_fetch_array($run_sup)) {
+    $sup_id = $row_sup['supplier_id'];
+    $nme = $row_sup['suppliername'];
+    echo "<option value='$sup_id'>$nme</option>";
+}
 ?>
+
 </select>
 </td>	</tr>
 <tr align="center">
@@ -150,21 +153,20 @@ Copyright&copy2017 Chrisaime, All Rights Reserved.
 </body>
 </html>
 <?php
-if(isset($_POST['model_btn'])){
-	//getting the text data from the fields
-	$marque=$_POST['marq'];
-	$supname=$_POST['supplier'];
-	
-	$insert_model="insert into model(marque,supplier_id) 
-	values('$marque','$supname')";
-	
-	$insert_mod=mysql_query($insert_model);
-	if($insert_mod){
-		
-	echo"<script> alert('model Has been Inserted!')</script>";
- echo"<script>window.open('index.php?insert_model','_self')</script>";
-	}
+if (isset($_POST['model_btn'])) {
+    // Getting the text data from the fields
+    $marque = $_POST['marq'];
+    $supname = $_POST['supplier'];
+    
+    // Make sure you are using the correct database connection ($conn)
+    $insert_model = "INSERT INTO model (marque, supplier_id) VALUES ('$marque', '$supname')";
+    
+    $insert_mod = mysqli_query($conn, $insert_model);
+    
+    if ($insert_mod) {
+        echo "<script> alert('Model Has been Inserted!')</script>";
+        echo "<script>window.open('index.php?insert_model', '_self')</script>";
+    }
 }
-
 ?>
 

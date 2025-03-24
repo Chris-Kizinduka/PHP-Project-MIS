@@ -142,24 +142,32 @@ Copyright&copy2017 Chrisaime, All Rights Reserved.
 </div>
 </body>
 </html>
+
 <?php
+
 if(isset($_POST['sup_btn'])){
-	//getting the text data from the fields
-	$supname=$_POST['supname'];
-	$phone=$_POST['phn'];
-	$address=$_POST['address'];
-	$email=$_POST['email'];
-	
-	$insert_sup="insert into supplier(suppliername,phone_number,Address,Email) 
-	values('$supname','$phone','$address','$email')";
-	
-	$insert_s=mysql_query($insert_sup);
-	if($insert_s){
-		
-	echo"<script> alert('Supplier Has been Inserted!')</script>";
- echo"<script>window.open('index.php?insert_supplier','_self')</script>";
-	}
+    // Getting the text data from the fields (NO sanitization)
+    $supname = $_POST['supname'];
+    $phone = $_POST['phn'];
+    $address = $_POST['address'];
+    $email = $_POST['email'];
+
+    // Direct query execution (NO prepared statements, NO sanitization)
+    $insert_sup = "INSERT INTO supplier (suppliername, phone_number, Address, Email) 
+                   VALUES ('$supname', '$phone', '$address', '$email')";
+
+    $insert_s = mysqli_query($conn, $insert_sup);
+
+    if($insert_s){
+        echo "<script>alert('Supplier has been inserted!')</script>";
+        echo "<script>window.open('index.php?insert_supplier','_self')</script>";
+    } else {
+        echo "<script>alert('Error inserting supplier: " . mysqli_error($conn) . "')</script>";
+    }
 }
 
 ?>
+
+
+
 

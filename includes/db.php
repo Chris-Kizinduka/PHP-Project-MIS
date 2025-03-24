@@ -1,12 +1,16 @@
-<?php
-$con=mysql_connect("localhost","root","")or die("!Down");
-if($con)
-{
-	mysql_select_db("cotamonyadb",$con);
-}
-else
-{
-	die("!DOWN");
-}
 
+
+<?php
+$host = "localhost";
+$user = "root";
+$password = "";
+$database = "cotamonyadb";
+
+// Create connection using MySQLi
+$conn = new mysqli($host, $user, $password, $database);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 ?>

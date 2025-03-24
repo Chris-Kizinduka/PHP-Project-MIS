@@ -36,29 +36,27 @@ include("includes/db.php");
 		  <th scope="col">Address</th>
 		  </thead> 
 		   <tbody>
-		<?php  
-			$query="SELECT * FROM supplier ";
-			$run=mysql_query($query);
-			while($row=mysql_fetch_array($run))
-			{
-				$sid=$row['supplier_id'];
-				$sname=$row['suppliername'];
-                $sphn=$row['phone_number'];
-                $address=$row['Address'];
-                $emails=$row['Email'];
-                
+    <?php  
+    $query = "SELECT * FROM supplier";
+    $run = mysqli_query($conn, $query); // Use mysqli_query instead of mysql_query
 
-			?>
-			<tr>
-			<td><?php echo $sid;?></td>
-			<td><?php echo $sname ;?></td>
-			<td><?php echo $sphn; ?> </td>
-			<td><?php echo $emails;?></td>
-			<td><?php echo $address;?></td>
-			<td><a href="editsupplier.php?edit_supplier=<?php echo $sid;?>">Edit</a></td>
-			</tr>
-			<?php }?>
-			</tbody>
+    while ($row = mysqli_fetch_array($run)) { // Use mysqli_fetch_array instead of mysql_fetch_array
+        $sid = $row['supplier_id'];
+        $sname = $row['suppliername'];
+        $sphn = $row['phone_number'];
+        $address = $row['Address'];
+        $emails = $row['Email'];
+    ?>
+    <tr>
+        <td><?php echo $sid; ?></td>
+        <td><?php echo $sname; ?></td>
+        <td><?php echo $sphn; ?></td>
+        <td><?php echo $emails; ?></td>
+        <td><?php echo $address; ?></td>
+        <td><a href="editsupplier.php?edit_supplier=<?php echo $sid; ?>">Edit</a></td>
+    </tr>
+    <?php } ?>
+</tbody>
 			
 			</table>	
 

@@ -1,21 +1,25 @@
 <!DOCTYPE>
 <?php
 include("includes/db.php");
-if(isset($_GET['id_card']))
-{
-	
-$get_id=$_GET['id_card'];
-$get_m="select member_id,fname,lname,m_image,dob,gender,date_created from member where member_id='$get_id'";
-$run_m =mysql_query($get_m);
-if($row_c=mysql_fetch_array($run_m)){;
-$member_id=$row_c['member_id'];
-$fname=$row_c['fname'];
-$lname=$row_c['lname'];
-$m_image=$row_c['m_image'];
-$dob=$row_c['dob'];
-$gender= $row_c['gender'];
-$date_created=$row_c['date_created'];
-			
+
+if(isset($_GET['id_card'])) {
+    $get_id = $_GET['id_card'];
+
+    // Use mysqli_query instead of mysql_query
+    $get_m = "SELECT member_id, fname, lname, m_image, dob, gender, date_created FROM member WHERE member_id = '$get_id'";
+    
+    // Make sure the connection is established and use mysqli_query
+    $run_m = mysqli_query($conn, $get_m);
+
+    if($row_c = mysqli_fetch_array($run_m)) {
+        $member_id = $row_c['member_id'];
+        $fname = $row_c['fname'];
+        $lname = $row_c['lname'];
+        $m_image = $row_c['m_image'];
+        $dob = $row_c['dob'];
+        $gender = $row_c['gender'];
+        $date_created = $row_c['date_created'];
+    }
 }
 ?>
 

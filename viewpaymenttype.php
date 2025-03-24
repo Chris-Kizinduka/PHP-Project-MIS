@@ -35,22 +35,31 @@ include("includes/db.php");
 		  </thead> 
 		   <tbody>
 		<?php  
-			$query="SELECT * FROM payment_types ";
-			$run=mysql_query($query);
-			while($row=mysql_fetch_array($run))
-			{
-				$pid=$row['paymenttypes_id'];
-				$typename=$row['type_name'];
-                $amount_to_pay=$row['amount_to_pay'];
+// Ensure you've already included the DB connection
+// Assuming $conn is your MySQLi connection variable
 
-			?>
-			<tr>
-			<td><?php echo $pid ;?></td>
-			<td><?php echo $typename ;?></td>
-			<td><?php echo $amount_to_pay ; ?> </td>
-			<td><a href="payment.php?pay_type=<?php echo $pid;?>">Make payment</a></td>
-			</tr>
-			<?php }?>
+$query = "SELECT * FROM payment_types";
+$run = $conn->query($query); // MySQLi query method
+
+if ($run->num_rows > 0) { // Check if there are rows returned
+    while ($row = $run->fetch_assoc()) { // Fetch data as an associative array
+        $pid = $row['paymenttypes_id'];
+        $typename = $row['type_name'];
+        $amount_to_pay = $row['amount_to_pay'];
+        ?>
+        <tr>
+            <td><?php echo $pid; ?></td>
+            <td><?php echo $typename; ?></td>
+            <td><?php echo $amount_to_pay; ?> </td>
+            <td><a href="payment.php?pay_type=<?php echo $pid; ?>">Make payment</a></td>
+        </tr>
+        <?php
+    }
+} else {
+    echo "No payment types found.";
+}
+?>
+
 			</tbody>
 			
 			</table>	

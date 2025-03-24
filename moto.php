@@ -130,16 +130,25 @@ include("includes/db.php");
 <td>
 <select name="model">
 <option>Select a Model</option>
+
+
 <?php
-$get_models="select*from model";
-	$run_models=mysql_query($get_models);
-	while($row_models=mysql_fetch_array($run_models))
-	{
-		$model_id=$row_models['model_id'];
-		$marque=$row_models['marque'];
-		echo"<option value='$model_id'>$marque</option>";
-	}
+// Ensure the MySQLi connection is established before running the query
+$get_models = "SELECT * FROM model";
+$run_models = mysqli_query($conn, $get_models); // Use `mysqli_query()` instead of `mysql_query()`
+
+if ($run_models) {
+    while ($row_models = mysqli_fetch_assoc($run_models)) { // Use `mysqli_fetch_assoc()` instead of `mysql_fetch_array()`
+        $model_id = $row_models['model_id'];
+        $marque = $row_models['marque'];
+        echo "<option value='$model_id'>$marque</option>";
+    }
+} else {
+    echo "Error: " . mysqli_error($conn); // Handle any errors
+}
 ?>
+
+
 </select>
 </td>	
 </tr>
@@ -161,39 +170,70 @@ Copyright&copy2017 Chrisaime, All Rights Reserved.
 </div>
 </body>
 </html>
+
+
 <?php
-if(isset($_POST['msave_btn'])){
-	//getting the text data from the fields
-	$Mplate_num=$_POST['plate_number'];
-	$Mmodel=$_POST['model'];
-	$Mpr_value=$_POST['pr_v'];
-	$status='active';
-	$target_dir = "moto_images/";
+if (isset($_POST['msave_btn'])) {
+    // Getting the text data from the fields
+    $Mplate_num = $_POST['plate_number'];
+    $Mmodel = $_POST['model'];
+    $Mpr_value = $_POST['pr_v'];
+    $status = 'active';
+
+    // File upload handling
+    $target_dir = "moto_images/";
     $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
     $uploadOk = 1;
+
+    // Check if the file is an image
     $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
-    if($check !== false) {
+    if ($check !== false) {
         echo "File is an image - " . $check["mime"] . ".";
         $uploadOk = 1;
     } else {
         echo "File is not an image.";
         $uploadOk = 0;
     }
-	  if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], "admin_area/$target_file")) {
-        echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
+
+    // Move the uploaded file to the desired folder
+    if ($uploadOk == 1 && move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], "admin_area/$target_file")) {
+        echo "The file " . basename($_FILES["fileToUpload"]["name"]) . " has been uploaded.";
     } else {
         echo "Sorry, there was an error uploading your file.";
     }
-	$insert_moto="insert into moto(plate_number,motoimage,model_id,property_value,status) 
-	values('$Mplate_num','$target_file','$Mmodel','$Mpr_value','$status')";
-	
-	$insert_m=mysql_query($insert_moto);
-	if($insert_m){
-		
-	echo"<script> alert('Moto Has been Inserted!')</script>";
- echo"<script>window.open('index.php?insert_moto','_self')</script>";
-	}
-}
 
+    // Database connection
+    $conn = mysqli_connect("localhost", "root", "", "cotamonyadb");
+
+    if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+
+    // Insert data into the database
+    $insert_moto = "INSERT INTO moto (plate_number, motoimage, model_id, property_value, status) 
+                    VALUES ('$Mplate_num', '$target_file', '$Mmodel', '$Mpr_value', '$status')";
+
+    $insert_m = mysqli_query($conn, $insert_moto);
+
+    if ($insert_m) {
+        echo "<script>alert('Moto Has been Inserted!');</script>";
+        echo "<script>window.open('index.php?insert_moto', '_self');</script>";
+    } else {
+        echo "Error: " . mysqli_error($conn); // Error handling
+    }
+
+    // Close connection
+    mysqli_close($conn);
+}
 ?>
+
+
+
+
+
+
+
+
+
+
 

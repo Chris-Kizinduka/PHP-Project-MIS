@@ -37,37 +37,37 @@ include("includes/db.php");
 		<th scope="col">Password</th>
 		 <th scope="col">Function</th>
 		  </thead> 
-		   <tbody>
-		<?php  
-			$query="SELECT function.fcname,users.user_id,users.firstname,users.lastname,users.phonenumber,users.email,users.username,users.password FROM users INNER JOIN function ON users.function_id = function.function_id";
-			$run=mysql_query($query);
-			while($row=mysql_fetch_array($run))
-			{
-				$id=$row['user_id'];
-				$firstname=$row['firstname'];
-$lastname=$row['lastname'];
-$phone=$row['phonenumber'];
-$email=$row['email'];
-$username = $row['username'];
-$password = $row['password'];
-$functions = $row['fcname'];
-			?>
-			<tr>
-			<td><?php echo $id;?></td>
-			<td><?php echo $firstname;?></td>
-			<td><?php echo $lastname;?></td>
-			<td><?php echo $phone;?></td>
-			<td><?php echo $email;?></td>
-			<td><?php echo $username;?></td>
-			<td><?php echo $password;?></td>
-			<td><?php echo $functions;?></td>
-		
-			<td><a href="edituser.php?edit_user=<?php echo $id;?>">Edit</a></td>
-			
-			</tr>
-			<?php }?>
-			</tbody>
-			
+		 <tbody>
+    <?php  
+    // Assuming you have a $conn variable for the database connection
+    $query = mysqli_query($conn, "SELECT function.fcname, users.user_id, users.firstname, users.lastname, users.phonenumber, users.email, users.username, users.password 
+                                  FROM users 
+                                  INNER JOIN function ON users.function_id = function.function_id");
+
+    while ($row = mysqli_fetch_array($query)) {
+        $id = $row['user_id'];
+        $firstname = $row['firstname'];
+        $lastname = $row['lastname'];
+        $phone = $row['phonenumber'];
+        $email = $row['email'];
+        $username = $row['username'];
+        $password = $row['password'];
+        $functions = $row['fcname'];
+    ?>
+        <tr>
+            <td><?php echo $id; ?></td>
+            <td><?php echo $firstname; ?></td>
+            <td><?php echo $lastname; ?></td>
+            <td><?php echo $phone; ?></td>
+            <td><?php echo $email; ?></td>
+            <td><?php echo $username; ?></td>
+            <td><?php echo $password; ?></td>
+            <td><?php echo $functions; ?></td>
+            <td><a href="edituser.php?edit_user=<?php echo $id; ?>">Edit</a></td>
+        </tr>
+    <?php } ?>
+</tbody>
+
 			</table>	
 
 

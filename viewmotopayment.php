@@ -48,39 +48,52 @@ include("includes/db.php");
 		  </thead> 
 		   <tbody>
 		<?php  
-	
-			$query = mysql_query("SELECT moto_payment.moto_pay_id,sum(moto_payment.paid_amount)as mptot,moto_payment.dueamount,count(moto_payment.leasing_id) as cpay ,moto_payment.leasing_id,member.fname,member.lname FROM moto_payment JOIN leasing ON moto_payment.leasing_id = leasing.leasing_id  left outer join member ON leasing.member_id = member.member_id GROUP BY moto_payment.leasing_id ");
-			while($row = mysql_fetch_array($query))
-			{
-				$mtid=$row['moto_pay_id'];
-				$sumpaid=$row['mptot'];
-                $countpay=$row['cpay'];
-                $lid=$row['leasing_id'];
-                $dam=$row['dueamount'];
-                $mm = $row['fname'];
-				$ml= $row['lname'];
-				$mt = $dam-$sumpaid;
+include("includes/db.php");
 
-			?>
-			<tr>
-			<td><?php echo $mtid;?></td>
-			<td><?php echo $mm  ;?> <?php echo $ml  ;?></td>
-			<td><?php echo $lid; ?> </td>
-			<td><?php echo $countpay; ?> Day(s) </td>
-			<td><?php echo $dam;?></td>
-			<td><?php echo $sumpaid;?></td>
-		    <td><?php echo $mt;?></td>
-			<td><a href="editmotopay.php?edit_motopay=<?php echo $mtid;?>">Edit</a></td>
-			<td><a href="moto_payment.php?pay_moto=<?php echo $lid;?>">Pay Moto</a></td>
-			</tr>
-			<?php }?>
-			</tbody>
+$query = "SELECT moto_payment.moto_pay_id, 
+                 SUM(moto_payment.paid_amount) AS mptot, 
+                 moto_payment.dueamount, 
+                 COUNT(moto_payment.leasing_id) AS cpay, 
+                 moto_payment.leasing_id, 
+                 member.fname, 
+                 member.lname 
+          FROM moto_payment 
+          JOIN leasing ON moto_payment.leasing_id = leasing.leasing_id  
+          LEFT JOIN member ON leasing.member_id = member.member_id 
+          GROUP BY moto_payment.leasing_id";
+
+$run = mysqli_query($conn, $query);
+
+while ($row = mysqli_fetch_array($run)) {
+    $mtid = $row['moto_pay_id'];
+    $sumpaid = $row['mptot'];
+    $countpay = $row['cpay'];
+    $lid = $row['leasing_id'];
+    $dam = $row['dueamount'];
+    $mm = $row['fname'];
+    $ml = $row['lname'];
+    $mt = $dam - $sumpaid;
+?>
+
+<tr>
+    <td><?php echo $mtid; ?></td>
+    <td><?php echo $mm . " " . $ml; ?></td>
+    <td><?php echo $lid; ?></td>
+    <td><?php echo $countpay; ?> Day(s)</td>
+    <td><?php echo $dam; ?></td>
+    <td><?php echo $sumpaid; ?></td>
+    <td><?php echo $mt; ?></td>
+    <td><a href="editmotopay.php?edit_motopay=<?php echo $mtid; ?>">Edit</a></td>
+    <td><a href="moto_payment.php?pay_moto=<?php echo $lid; ?>">Pay Moto</a></td>
+
+</tr>
+<?php } ?>
+
+</tbody>
 			
 			</table>	
 			
-			<table>
-			<tr>
-			
+						
 
 
 </div>

@@ -46,35 +46,49 @@ include("includes/db.php");
 				 <th scope="col">Status</th>
 		  </thead> 
 		   <tbody>
-		<?php  
-	
-			$query = mysql_query("SELECT leasing.leasing_id,leasing.start_date,leasing.end_date,leasing.due_amount,leasing.status,contractperiod.periodname,member.fname,member.lname,moto.plate_number FROM leasing  JOIN member   ON leasing.member_id = member.member_id JOIN moto  ON leasing.moto_id = moto.moto_id JOIN contractperiod  ON leasing.cid = contractperiod.cid ");
-			while($row = mysql_fetch_array($query))
-			{
-				$lid=$row['leasing_id'];
-				$sdate=$row['start_date'];
-                $edate=$row['end_date'];
-                $cid=$row['periodname'];
-                $dam=$row['due_amount'];
-                $mm = $row['fname'];
-				$ml= $row['lname'];
-				 $mt = $row['plate_number'];
-				  $status = $row['status'];
+		   
+		   
+	<?php  
+// Make sure $conn is defined for your database connection
+$query = mysqli_query($conn, "SELECT leasing.leasing_id, leasing.start_date, leasing.end_date, leasing.due_amount, leasing.status, contractperiod.periodname, member.fname, member.lname, moto.plate_number 
+                              FROM leasing  
+                              JOIN member ON leasing.member_id = member.member_id 
+                              JOIN moto ON leasing.moto_id = moto.moto_id 
+                              JOIN contractperiod ON leasing.cid = contractperiod.cid");
 
-			?>
-			<tr>
-			<td><?php echo $lid;?></td>
-			<td><?php echo $mm  ;?> <?php echo $ml  ;?></td>
-			<td><?php echo $mt; ?> </td>
-			<td><?php echo $cid;?></td>
-			<td><?php echo $sdate;?></td>
-			<td><?php echo $edate;?></td>
-		    <td><?php echo $dam;?></td>
-			<td><?php echo $status;?></td>
-			<td><a href="editleasing.php?edit_leasing=<?php echo $lid;?>">Edit</a></td>
-			<td><a href="moto_payment.php?pay_moto=<?php echo $lid;?>">Pay Moto</a></td>
-			</tr>
-			<?php }?>
+if (!$query) {
+    die("Query failed: " . mysqli_error($conn)); // Error handling
+}
+
+while ($row = mysqli_fetch_assoc($query)) { // Use `mysqli_fetch_assoc()`
+    $lid = $row['leasing_id'];
+    $sdate = $row['start_date'];
+    $edate = $row['end_date'];
+    $cid = $row['periodname'];
+    $dam = $row['due_amount'];
+    $mm = $row['fname'];
+    $ml = $row['lname'];
+    $mt = $row['plate_number'];
+    $status = $row['status'];
+?>
+
+<tr>
+    <td><?php echo $lid; ?></td>
+    <td><?php echo $mm . ' ' . $ml; ?></td>
+    <td><?php echo $mt; ?></td>
+    <td><?php echo $cid; ?></td>
+    <td><?php echo $sdate; ?></td>
+    <td><?php echo $edate; ?></td>
+    <td><?php echo $dam; ?></td>
+    <td><?php echo $status; ?></td>
+    <td><a href="editleasing.php?edit_leasing=<?php echo $lid; ?>">Edit</a></td>
+    <td><a href="moto_payment.php?pay_moto=<?php echo $lid; ?>">Pay Moto</a></td>
+</tr>
+
+<?php } ?>
+	   
+		   
+			
 			</tbody>
 			
 			</table>	

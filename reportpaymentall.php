@@ -33,14 +33,17 @@ include("includes/db.php");
  <select name="rptype">
 <option>Select Payment<option>
 <?php
-$get_s="select * from payment_types" ;
-	$run_s=mysql_query($get_s);
-	while($row_s=mysql_fetch_array($run_s)){
-	$pid=$row_s['paymenttypes_id'];
-    $typename=$row_s['type_name'];
-	echo"<option value='$pid'>$typename</option>";
-	}
+// Assuming you have a database connection already established in $conn
+$get_s = "SELECT * FROM payment_types";
+$run_s = mysqli_query($conn, $get_s);
+
+while ($row_s = mysqli_fetch_array($run_s)) {
+    $pid = $row_s['paymenttypes_id'];
+    $typename = $row_s['type_name'];
+    echo "<option value='$pid'>$typename</option>";
+}
 ?>
+
 </select>
 <input type="submit" name= "search" value="View"  />
 </form>

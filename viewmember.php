@@ -76,52 +76,64 @@ function myfunction()
 		 </tr>	
 		  </thead> 
 		   <tbody>
-		<?php  
-			$query="select * from member ORDER BY fname ASC";
-			$run=mysql_query($query);
-			while($row=mysql_fetch_array($run))
-			{
-				$id=$row['member_id'];
-				$firstname=$row['fname'];
-$lastname=$row['lname'];
-$mimage=$row['m_image'];
-$dob=$row['dob'];
-$gender = $row['gender'];
-$nid = $row['n_ID'];
-$status=$row['status'];
-$phone=$row['phone_number'];
-$location=$row['place_of_residence'];
-$fmlymn = $row['fmly_m_name'];
-$fmlymp = $row['fmly_m_phone'];
-$fmlymid = $row['fmly_m_id'];
-$function=$row['function'];
-$drivlic = $row['driving_license_no'];
-$lcategory = $row['license_category'];
-$datecreated=$row['date_created']				?>
-			<tr>
-			<td><?php echo $id;?></td>
-			<td><?php echo $firstname;?></td>
-			<td><?php echo $lastname;?></td>
-			<td><img src="members/<?php echo $mimage; ?>" width="100" height="100"> </td>
-			<td><?php echo $dob;?></td>
-			<td><?php echo $gender;?></td>
-			<td><?php echo $nid;?></td>
-			<td><?php echo $status;?></td>
-			<td><?php echo $phone;?></td>
-			<td><?php echo $location;?></td>
-			<td><?php echo $fmlymn;?></td>
-			<td><?php echo $fmlymp;?></td>
-			<td><?php echo $fmlymid;?></td>
-			<td><?php echo $function;?></td>
-			<td><?php echo $drivlic;?></td>
-			<td><?php echo $lcategory;?></td>
-			<td><?php echo $datecreated;?></td>
+		   
+		   
+<?php  
+
+$query = "SELECT * FROM member ORDER BY fname ASC";
+$run = mysqli_query($conn, $query); // Use `mysqli_query` instead of `mysql_query`
+
+if (!$run) {
+    die("Query failed: " . mysqli_error($conn)); // Error handling
+}
+
+while ($row = mysqli_fetch_assoc($run)) { // Use `mysqli_fetch_assoc()`
+    $id = $row['member_id'];
+    $firstname = $row['fname'];
+    $lastname = $row['lname'];
+    $mimage = $row['m_image'];
+    $dob = $row['dob'];
+    $gender = $row['gender'];
+    $nid = $row['n_ID'];
+    $status = $row['status'];
+    $phone = $row['phone_number'];
+    $location = $row['place_of_residence'];
+    $fmlymn = $row['fmly_m_name'];
+    $fmlymp = $row['fmly_m_phone'];
+    $fmlymid = $row['fmly_m_id'];
+    $function = $row['function'];
+    $drivlic = $row['driving_license_no'];
+    $lcategory = $row['license_category'];
+    $datecreated = $row['date_created'];
+?>
+    <tr>
+        <td><?php echo $id; ?></td>
+        <td><?php echo $firstname; ?></td>
+        <td><?php echo $lastname; ?></td>
+        <td><img src="members/<?php echo $mimage; ?>" width="100" height="100"></td>
+        <td><?php echo $dob; ?></td>
+        <td><?php echo $gender; ?></td>
+        <td><?php echo $nid; ?></td>
+        <td><?php echo $status; ?></td>
+        <td><?php echo $phone; ?></td>
+        <td><?php echo $location; ?></td>
+        <td><?php echo $fmlymn; ?></td>
+        <td><?php echo $fmlymp; ?></td>
+        <td><?php echo $fmlymid; ?></td>
+        <td><?php echo $function; ?></td>
+        <td><?php echo $drivlic; ?></td>
+        <td><?php echo $lcategory; ?></td>
+        <td><?php echo $datecreated; ?></td>
+        <td><a href="editmember.php?edit_member=<?php echo $id; ?>">Edit</a></td>
+        <td><a href="mcard.php?id_card=<?php echo $id; ?>">View Card</a></td>
+    </tr>
+<?php 
+} 
+?>		   
+		   
+		   
+		   
 		
-			
-			<td><a href="editmember.php?edit_member=<?php echo $id;?>">edit</a></td>
-			<td><a href="mcard.php?id_card=<?php echo $id;?>">View Card</a></td>
-			</tr>
-			<?php }?>
 			</tbody>
 			
 			</table>	

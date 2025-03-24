@@ -214,56 +214,91 @@ Copyright&copy2017 Chrisaime, All Rights Reserved.
 </div>
 </body>
 </html>
+
+
+
+
 <?php
-if(isset($_POST['mem_btn'])){
-$firstname=$_POST['fname'];
-$lastname=$_POST['lname'];
-$phone=$_POST['phonen'];
-$status=$_POST['status'];
-$dob=$_POST['date'];
-$birthdate=new DateTime($dob);
-$interval=$birthdate->diff(new DateTime);
-$age=$interval->y;
-$function=$_POST['function'];
-$gender = $_POST['gender'];
-$nid = $_POST['n_ID'];
-$location=$_POST['location'];
-$fmlymn = $_POST['fmlyn'];
-$fmlymp = $_POST['fmlyp'];
-$fmlymid = $_POST['fmlyid'];
-$drivlic = $_POST['drivlic'];
-$lcategory = $_POST['lcat'];
 
-	if($age<16){
-	echo "<script>alert('Sorry you are $age years old a Teenager not allowed to be registered ')</script>";	
-	}else{
-$target_dir = "m_images/";
-$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-$uploadOk = 1;
-  $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
-    if($check !== false) {
-        echo "File is an image - " . $check["mime"] . ".";
+if (isset($_POST['mem_btn'])) {
+    $firstname = $_POST['fname'];
+    $lastname = $_POST['lname'];
+    $phone = $_POST['phonen'];
+    $status = $_POST['status'];
+    $dob = $_POST['date'];
+    $birthdate = new DateTime($dob);
+    $interval = $birthdate->diff(new DateTime());
+    $age = $interval->y;
+    $function = $_POST['function'];
+    $gender = $_POST['gender'];
+    $nid = $_POST['n_ID'];
+    $location = $_POST['location'];
+    $fmlymn = $_POST['fmlyn'];
+    $fmlymp = $_POST['fmlyp'];
+    $fmlymid = $_POST['fmlyid'];
+    $drivlic = $_POST['drivlic'];
+    $lcategory = $_POST['lcat'];
+
+    if ($age < 16) {
+        echo "<script>alert('Sorry, you are $age years old, a teenager, and not allowed to be registered.')</script>";
+    } else {
+        // **File Upload Handling**
+        $target_dir = "m_images/";
+        $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
         $uploadOk = 1;
-    } else {
-        echo "File is not an image.";
-        $uploadOk = 0;
+        
+        $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+        if ($check !== false) {
+            $uploadOk = 1;
+        } else {
+            echo "File is not an image.";
+            $uploadOk = 0;
+        }
+
+        if ($uploadOk == 1 && move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+            echo "The file " . basename($_FILES["fileToUpload"]["name"]) . " has been uploaded.";
+        } else {
+            echo "Sorry, there was an error uploading your file.";
+            $target_file = ""; // Reset if upload fails
+        }
+
+        // **Database Insert**
+        $sql = "INSERT INTO member (fname, lname, m_image, dob, gender, n_ID, status, phone_number, place_of_residence, fmly_m_name, fmly_m_phone, fmly_m_id, function, driving_license_no, license_category, date_created) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sssssssssssssss", $firstname, $lastname, $target_file, $dob, $gender, $nid, $status, $phone, $location, $fmlymn, $fmlymp, $fmlymid, $function, $drivlic, $lcategory);
+
+        if ($stmt->execute()) {
+            echo "<script>alert('Member saved successfully!')</script>";
+            echo "<script>window.open('member.php?insertuser', '_self')</script>";
+        } else {
+            echo "Error: " . $stmt->error;
+        }
+
+        $stmt->close();
     }
-	  if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], "members/$target_file")) {
-        echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
-    } else {
-        echo "Sorry, there was an error uploading your file.";
-    }		
-$sql ="insert into member(fname,lname,m_image,dob,gender,n_ID,status,phone_number,place_of_residence,fmly_m_name,fmly_m_phone,fmly_m_id,function,driving_license_no,license_category,date_created)
-values('$firstname','$lastname','$target_file','$dob','$gender','$nid','$status','$phone','$location','$fmlymn','$fmlymp','$fmlymid','$function','$drivlic','$lcategory',Now())";
-$insert_p = mysql_query($sql);
-	 if($insert_p)
-	{
-		echo "<script>alert('a member saved')</script>";
-		 echo"<script>window.open('member.php?insertuser','_self')</script>";
-		
-	}	
-	}
 }
-
-
 ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

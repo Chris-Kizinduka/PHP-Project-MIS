@@ -62,76 +62,76 @@ function myfunction()
 		 <th scope="col">Expected Profit</th>
 		
 		  </thead> 
-		   <tbody>
-		<?php  
-if(isset($_GET['search']))
-{
-	
-	$lid=$_GET['reportmt']; 
-	$query = mysql_query("SELECT moto_payment.moto_pay_id,sum(moto_payment.paid_amount)as mptot,moto_payment.dueamount,count(moto_payment.leasing_id) as cpay ,moto_payment.leasing_id,leasing.member_id,member.fname,member.lname,member.m_image,member.phone_number,member.function,moto.plate_number,moto.property_value FROM moto_payment JOIN leasing ON moto_payment.leasing_id = leasing.leasing_id  left outer join member ON leasing.member_id = member.member_id left join moto on leasing.moto_id = moto.moto_id GROUP BY moto_payment.leasing_id having moto_payment.leasing_id ='$lid'");
-			while($row = mysql_fetch_array($query))
-			{
-				
-				$mid=$row['member_id'];
-				$mm = $row['fname'];
-				$ml= $row['lname'];
-				$mimage=$row['m_image'];
-				$mfc=$row['function'];
-				$mphn=$row['phone_number'];
-				$lid=$row['leasing_id'];
-				$pv=$row['property_value'];
-				$pn=$row['plate_number'];
-                $sumpaid=$row['mptot'];
-				
-                $countpay=$row['cpay'];
-				$dam=$row['dueamount'];
-				$mt = $dam-$sumpaid;
-				
-				$ext=$dam-$pv;
-				
-				$profit=$sumpaid-$pv;
-			
-				
-			?>
-			
-			<tr colspan="5">
-			<td><?php echo $mid;?></td>
-			<td><?php echo $mm ;?>  <?php echo $ml ;?></td>
-			<td><img src="members/<?php echo $mimage; ?>" width="50" height="50"> </td>
-			<td><?php echo $mphn;?></td>
-			<td><?php echo $mfc;?></td>
-			<td><?php echo $lid;?></td>
-			<td><?php echo $pn; ?> </td>
-			<td><?php echo $pv; ?> </td>
-			<td><?php echo $dam; ?> </td>
-			<td><?php echo $sumpaid;?></td>
-			<td style=" font-size:12px ; color:red;"><?php echo $mt; ?> </td>
-		    <td><?php echo $countpay;?> Day(s)</td>
-			<td><?php echo $profit;?></td>
-			<td><?php echo $ext; ?> </td>
-			
-			</tr>
-		
-<?php }}?>
-   <tr style="background:#b9c9fe url('table-images/gradhead.png') repeat-x;">
+		<tbody>
+<?php  
+if (isset($_GET['search'])) {
+    $lid = $_GET['reportmt'];
 
-<td colspan="15">
-</td>
-</tr>
+    // Replace mysql_* with mysqli_*
+    $query = mysqli_query($conn, "SELECT moto_payment.moto_pay_id, SUM(moto_payment.paid_amount) AS mptot, 
+                                  moto_payment.dueamount, COUNT(moto_payment.leasing_id) AS cpay, 
+                                  moto_payment.leasing_id, leasing.member_id, member.fname, 
+                                  member.lname, member.m_image, member.phone_number, member.function, 
+                                  moto.plate_number, moto.property_value 
+                                  FROM moto_payment 
+                                  JOIN leasing ON moto_payment.leasing_id = leasing.leasing_id  
+                                  LEFT OUTER JOIN member ON leasing.member_id = member.member_id 
+                                  LEFT JOIN moto ON leasing.moto_id = moto.moto_id 
+                                  GROUP BY moto_payment.leasing_id 
+                                  HAVING moto_payment.leasing_id = '$lid'");
 
+    while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
+        $mid = $row['member_id'];
+        $mm = $row['fname'];
+        $ml = $row['lname'];
+        $mimage = $row['m_image'];
+        $mfc = $row['function'];
+        $mphn = $row['phone_number'];
+        $lid = $row['leasing_id'];
+        $pv = $row['property_value'];
+        $pn = $row['plate_number'];
+        $sumpaid = $row['mptot'];
+        $countpay = $row['cpay'];
+        $dam = $row['dueamount'];
+        $mt = $dam - $sumpaid;
+        $ext = $dam - $pv;
+        $profit = $sumpaid - $pv;
+?>
+        <tr colspan="5">
+            <td><?php echo $mid; ?></td>
+            <td><?php echo $mm . " " . $ml; ?></td>
+            <td><img src="members/<?php echo $mimage; ?>" width="50" height="50"></td>
+            <td><?php echo $mphn; ?></td>
+            <td><?php echo $mfc; ?></td>
+            <td><?php echo $lid; ?></td>
+            <td><?php echo $pn; ?> </td>
+            <td><?php echo $pv; ?> </td>
+            <td><?php echo $dam; ?> </td>
+            <td><?php echo $sumpaid; ?></td>
+            <td style="font-size:12px; color:red;"><?php echo $mt; ?> </td>
+            <td><?php echo $countpay; ?> Day(s)</td>
+            <td><?php echo $profit; ?></td>
+            <td><?php echo $ext; ?> </td>
+        </tr>
+<?php 
+    }
+}
+?>
+    <tr style="background:#b9c9fe url('table-images/gradhead.png') repeat-x;">
+        <td colspan="15"></td>
+    </tr>
+</tbody>
 
-   
-			</tbody>
 			
 			</table>	
 <div class="pull-right">
-								
-								<h4>Done on <?php
-								$Today = date('y:m:d');
-								$new = date('l, F d, Y', strtotime($Today));
-								echo $new;
-								?></h4>
-		</div>
+    <h4>Done on 
+        <?php
+        // Get the current date in proper format
+        echo date('l, F d, Y'); 
+        ?>
+    </h4>
+</div>
 </div>
 
 		</form>	

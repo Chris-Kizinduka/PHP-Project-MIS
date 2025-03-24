@@ -55,80 +55,70 @@ function myfunction()
 		 <th scope="col">number of payments</th>
 		 <th scope="col">Amount</th>
 		  </thead> 
-		   <tbody>
-		<?php  
-	if(isset($_GET['search']))
-{
-	
-	
-	$pid=$_GET['rptype'];
-		
-	  
-			$query = mysql_query("SELECT member.member_id,member.fname,member.lname,member.m_image,member.gender,member.phone_number,member.function,count(payment.member_id)as cpay,sum(payment.amount)as tot,payment.paymenttypes_id,payment.p_date,payment_types.type_name FROM payment left outer join  member   ON payment.member_id = member.member_id left outer join payment_types  ON payment.paymenttypes_id = payment_types.paymenttypes_id  GROUP BY payment.member_id,payment.paymenttypes_id HAVING payment.paymenttypes_id='$pid'");
-			
-			
-			
-			while($row = mysql_fetch_array($query))
-			{
-				$mid=$row['member_id'];
-				$mm = $row['fname'];
-				$ml= $row['lname'];
-				$gender=$row['gender'];
-				$mimage=$row['m_image'];
-				$mfc=$row['function'];
-				$mphn=$row['phone_number'];
-                $countpay=$row['cpay'];
-                $sumamount = $row['tot'];
-                $typename=$row['type_name'];
-				
-			?>
-			
-			<tr colspan="5">
-			<td><?php echo $mid;?></td>
-			<td><?php echo $mm ;?>  <?php echo $ml ;?></td>
-			<td><img src="members/<?php echo $mimage; ?>" width="50" height="50"> </td>
-			<td><?php echo $gender; ?> </td>
-			<td><?php echo $mphn;?></td>
-			<td><?php echo $mfc;?></td>
-			<td><?php echo $typename;?></td>
-		    <td><?php echo $countpay;?></td>
-			<td><?php echo $sumamount;?></td>
-			
-			</tr>
-			
-   <?php }?>
-<tr>
+	<tbody>
+    <?php
+    if (isset($_GET['search'])) {
+        $pid = $_GET['rptype'];
 
-<?php 
-$query0=mysql_query("select sum(amount) from payment where paymenttypes_id='$pid'");
-while($run=mysql_fetch_array($query0))
-{
-	$sum=$run['sum(amount)'];
+        // Assuming you have a database connection already established in $conn
+        $query = mysqli_query($conn, "SELECT member.member_id, member.fname, member.lname, member.m_image, member.gender, member.phone_number, member.function, COUNT(payment.member_id) AS cpay, SUM(payment.amount) AS tot, payment.paymenttypes_id, payment.p_date, payment_types.type_name 
+                                      FROM payment 
+                                      LEFT OUTER JOIN member ON payment.member_id = member.member_id 
+                                      LEFT OUTER JOIN payment_types ON payment.paymenttypes_id = payment_types.paymenttypes_id 
+                                      GROUP BY payment.member_id, payment.paymenttypes_id 
+                                      HAVING payment.paymenttypes_id = '$pid'");
 
+        while ($row = mysqli_fetch_array($query)) {
+            $mid = $row['member_id'];
+            $mm = $row['fname'];
+            $ml = $row['lname'];
+            $gender = $row['gender'];
+            $mimage = $row['m_image'];
+            $mfc = $row['function'];
+            $mphn = $row['phone_number'];
+            $countpay = $row['cpay'];
+            $sumamount = $row['tot'];
+            $typename = $row['type_name'];
+    ?>
+            <tr colspan="5">
+                <td><?php echo $mid; ?></td>
+                <td><?php echo $mm; ?> <?php echo $ml; ?></td>
+                <td><img src="members/<?php echo $mimage; ?>" width="50" height="50"> </td>
+                <td><?php echo $gender; ?> </td>
+                <td><?php echo $mphn; ?></td>
+                <td><?php echo $mfc; ?></td>
+                <td><?php echo $typename; ?></td>
+                <td><?php echo $countpay; ?></td>
+                <td><?php echo $sumamount; ?></td>
+            </tr>
+    <?php } ?>
+        <tr>
+            <?php
+            // Total sum query
+            $query0 = mysqli_query($conn, "SELECT SUM(amount) AS total_amount FROM payment WHERE paymenttypes_id = '$pid'");
+            $run = mysqli_fetch_array($query0);
+            $sum = $run['total_amount'];
+            ?>
+            <td style="text-align:right;" colspan="15">
+                <b><h4><u>Total: <?php echo $sum; ?> frw</u></h4></b>
+            </td>
+        </tr>
+    <?php } ?>
+</tbody>
 
-?>
-<td style="text-align:right;" colspan="15">
-<b><h4><u>Total:<?php echo $sum; ?>frw</u></h4></b>
-</td>
-</tr>
-<?php }}?>
-
-   
-   
-			</tbody>
 
 			</table>	
 
 
 </div>
 <div class="pull-right">
-								
-								<h4>Done on <?php
-								$Today = date('y:m:d');
-								$new = date('l, F d, Y', strtotime($Today));
-								echo $new;
-								?></h4>
-		</div>
+    <h4>Done on 
+        <?php
+        // Get the current date in proper format
+        echo date('l, F d, Y'); 
+        ?>
+    </h4>
+</div>
 		</form>	
 </div>
 

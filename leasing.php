@@ -120,37 +120,46 @@ include("includes/db.php");
 <td>
 <select name="nam" >
 <option></option>
+
 <?php
-$get_member="select member_id,fname,lname,function from member where member_id NOT IN (select member_id from leasing where status='activeted') and function='Driver' " ;
-	$run_member=mysql_query($get_member);
-	while($row_m=mysql_fetch_array($run_member))
-	{
-		$m_id=$row_m['member_id'];
-		$fn=$row_m['fname'];
-		$ln=$row_m['lname'];
-		echo"<option value='$m_id'>$fn $ln</option>";
-	}
+// Ensure this is connected using MySQLi
+$get_member = "SELECT member_id, fname, lname, function FROM member WHERE member_id NOT IN (SELECT member_id FROM leasing WHERE status='activated') AND function='Driver'";
+$run_member = mysqli_query($conn, $get_member); // Use `mysqli_query()` instead of `mysql_query()`
+if ($run_member) {
+    while ($row_m = mysqli_fetch_assoc($run_member)) { // Use `mysqli_fetch_assoc()` instead of `mysql_fetch_array()`
+        $m_id = $row_m['member_id'];
+        $fn = $row_m['fname'];
+        $ln = $row_m['lname'];
+        echo "<option value='$m_id'>$fn $ln</option>";
+    }
+} else {
+    echo "Error: " . mysqli_error($conn); // Error handling if query fails
+}
 ?>
 </select>
-</td>	
-
+</td>    
 
 </tr>
 <tr>
-<td>select a Moto:</td>
+<td>Select a Moto:</td>
 <td>
-<select name="moto" >
+<select name="moto">
 <option></option>
 <?php
-$get_m="select * from  moto where status ='active' ";
-	$run_m=mysql_query($get_m);
-	while($row_m=mysql_fetch_array($run_m))
-	{
-		$m_id=$row_m['moto_id'];
-		$platen=$row_m['plate_number'];
-		echo"<option value='$m_id'>$platen</option>";
-	}
+$get_m = "SELECT * FROM moto WHERE status = 'active'";
+$run_m = mysqli_query($conn, $get_m); // Use `mysqli_query()` instead of `mysql_query()`
+if ($run_m) {
+    while ($row_m = mysqli_fetch_assoc($run_m)) { // Use `mysqli_fetch_assoc()` instead of `mysql_fetch_array()`
+        $m_id = $row_m['moto_id'];
+        $platen = $row_m['plate_number'];
+        echo "<option value='$m_id'>$platen</option>";
+    }
+} else {
+    echo "Error: " . mysqli_error($conn); // Error handling if query fails
+}
 ?>
+
+
 </select>
 </td>	
 
@@ -162,15 +171,18 @@ $get_m="select * from  moto where status ='active' ";
 <td><select name="periodname">
 <option></option>
 <?php
-$get_p="select* from contractperiod ";
-	$run_p=mysql_query($get_p);
-	while($row_p=mysql_fetch_array($run_p))
-	{
-		$pid=$row_p['cid'];
-		$pn=$row_p['periodname'];
-		echo"<option value='$pid'> $pn </option>";
-	}
+
+// Query to fetch contract periods
+$get_p = "SELECT * FROM contractperiod";
+$run_p = mysqli_query($conn, $get_p);
+
+while ($row_p = mysqli_fetch_array($run_p)) {
+    $pid = $row_p['cid'];
+    $pn = $row_p['periodname'];
+    echo "<option value='$pid'>$pn</option>";
+}
 ?>
+
 </select>
 </td>
 </tr>
@@ -195,68 +207,70 @@ Copyright&copy2017 Chrisaime, All Rights Reserved.
 </div>
 </body>
 </html>
+
+
 <?php
-if(isset($_POST['add_leasing'])){
+if (isset($_POST['add_leasing'])) {
+  
+  // Assuming $conn is your already established connection
+  
+  $name = $_POST['nam'];
+  $check_id = "SELECT * FROM leasing WHERE member_id = '$name'";
+  $run_id = mysqli_query($conn, $check_id);
 
-  $name=$_POST['nam'];
-  $check_id="select * from leasing where member_id='$name' ";
-  $run_id=mysql_query($check_id);
-  if(mysql_num_rows($run_id)>0)
-  {
-    echo "<script>alert('Contract  already exist!.')</script>";
-        echo"<script>window.location('leasing.php')</script>";
-    
+  if (mysqli_num_rows($run_id) > 0) {
+    echo "<script>alert('Contract already exists!')</script>";
+    echo "<script>window.location='leasing.php'</script>";
+  } else {
+    // Getting the text data from the field
+    $m_name = $_POST['nam'];
+    $moto_pnumber = $_POST['moto'];
+    $period = $_POST['periodname'];
+    $start_date = date('y-m-d');
+    $damount = $_POST['dueamount'];
+    $status = 'activated';
+    $todate = date('y-m-d');
+    $today = "";
+    $amount = "";
+    $End_date = "";
+
+    if ($period == 1) {
+      $End_date = date('y-m-d', strtotime($today . ' + 360 days'));
+    } else if ($period == 2) {
+      $End_date = date('y-m-d', strtotime($today . ' + 720 days'));
+    }
+
+    // Insert contract into leasing table
+    $Add_contract = "INSERT INTO leasing (start_date, end_date, cid, due_amount, member_id, moto_id, status) 
+                     VALUES ('$start_date', '$End_date', '$period', '$damount', '$m_name', '$moto_pnumber', '$status')";
+    $Add_con = mysqli_query($conn, $Add_contract);
+
+    // Update the status of existing contracts
+    $status1 = "UPDATE leasing SET status = 'disactivated' WHERE end_date <= '$todate'";
+    $status2 = "UPDATE moto SET status = 'leased' WHERE moto_id = '$moto_pnumber'";
+
+    $run_status1 = mysqli_query($conn, $status1);
+    $run_status2 = mysqli_query($conn, $status2);
+
+    if ($Add_con && $run_status1 && $run_status2) {
+      echo "<script>alert('Leasing Contract has been added!')</script>";
+      echo "<script>window.open('leasing.php', '_self')</script>";
+    }
   }
-
-else{
-	
-	//geting the text data from the field
-	
-	$m_name = $_POST['nam'];
-	$moto_pnumber = $_POST['moto'];
-	$period = $_POST['periodname'];
-	$start_date= date ('y-m-d');
-	$damount=$_POST['dueamount'];
-	$status= 'activeted';
-	$todate= date ('y-m-d');
-	$today="";
-	$amount="";
-	$End_date="";
-	if($period==1)
-	{
-		
-		$End_date=date('y-m-d', strtotime($today. ' + 360 days'));
-		
-
-	}
-	else if($period==2)
-	{
-		$End_date=date('y-m-d', strtotime($today. ' + 720 days'));
-		
-	}
-	
-	
-	
-	$Add_contract= "insert into leasing (start_date,end_date,cid,due_amount,member_id,moto_id,status) values ('$start_date','$End_date','$period','$damount','$m_name','$moto_pnumber','$status')";
-	$Add_con = mysql_query($Add_contract);
-	$status1= "update leasing set status='disactivated' where end_date <='$todate'";
-	$status2= "update moto set status='leased' where moto_id ='$moto_pnumber' ";
-    $run_status1=mysql_query($status1);
-	$run_status2=mysql_query($status2);
-	if ($Add_con && $run_status1 && $run_status2 ){
-		
-	echo "<script>alert('leasing Contract has been added!')</script>"	;
-	
-		
-		echo "<script>window.open('leasing.php','_self')</script>";	
-	}
-	
 }
-}
-
-
-
 ?>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

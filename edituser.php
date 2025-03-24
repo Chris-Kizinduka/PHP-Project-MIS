@@ -1,35 +1,36 @@
 <!DOCTYPE>
 
 <?php
-include("includes/db.php");
-if(isset($_GET['edit_user']))
-{
-	function clean($str){
-		$str=@trim($str);
-	if(get_magic_quotes_gpc())
-	{
-	$str=stripslashes($str);	
-	}
-	return mysql_real_escape_string($str);
-	}
-	
-	$get_id=$_GET['edit_user'];
-	$query="SELECT function.fcname,users.user_id,users.firstname,users.lastname,users.function_id,users.phonenumber,users.email,users.username,users.password FROM users INNER JOIN function ON users.function_id = function.function_id where users.user_id='$get_id'";
-			$run=mysql_query($query);
-			if($row=mysql_fetch_array($run))
-			{
-				$id=$row['user_id'];
-				$firstname=$row['firstname'];
-$lastname=$row['lastname'];
-$phone=$row['phonenumber'];
-$email=$row['email'];
-$username = $row['username'];
-$password = $row['password'];
-$functions = $row['fcname'];
-$funcid = $row['function_id'];
-}
+include("includes/db.php"); // Ensure $conn is included and available
+
+if (isset($_GET['edit_user'])) {
+    
+    $get_id = $_GET['edit_user'];
+
+    // Query without prepared statements (as per request)
+    $query = "SELECT function.fcname, users.user_id, users.firstname, users.lastname, users.function_id, 
+                     users.phonenumber, users.email, users.username, users.password 
+              FROM users 
+              INNER JOIN function ON users.function_id = function.function_id 
+              WHERE users.user_id = '$get_id'";
+
+    $run = mysqli_query($conn, $query);
+
+    if ($row = mysqli_fetch_array($run)) {
+        $id = $row['user_id'];
+        $firstname = $row['firstname'];
+        $lastname = $row['lastname'];
+        $phone = $row['phonenumber'];
+        $email = $row['email'];
+        $username = $row['username'];
+        $password = $row['password'];
+        $functions = $row['fcname'];
+        $funcid = $row['function_id'];
+    }
 }
 ?>
+
+
 
 <html>
 <head>
@@ -139,71 +140,76 @@ $funcid = $row['function_id'];
 <div class="content_wrapper"> 
 <div id="content_area">
 <form method="post" action="" enctype="multipart/form-data">
+    <table align="center" cellspacing="20px">
+        <tr align="center">
+            <td colspan="8"><u><h2> User Registration </h2></u></td>
+        </tr>
+        <tr>
+            <td>First Name:</td>
+            <td><input type="text" name="firstname" value="<?php echo htmlspecialchars($firstname); ?>" class="textInput" required></td>
+        </tr>
+        <tr>
+            <td>Last Name:</td>
+            <td><input type="text" name="lastname" value="<?php echo htmlspecialchars($lastname); ?>" class="textInput" required></td>
+        </tr>
+        <tr>
+            <td>Phone Number:</td>
+            <td><input type="text" name="phonenumber" value="<?php echo htmlspecialchars($phone); ?>" class="textInput" required></td>
+        </tr>
+        <tr>
+            <td>Email:</td>
+            <td><input type="email" name="email" value="<?php echo htmlspecialchars($email); ?>" class="textInput" required></td>
+        </tr>
+        <tr>
+            <td>Function:</td>
+            <td>
+                <select name="funct" required>
+                    <option value="<?php echo $funcid; ?>"><?php echo htmlspecialchars($functions); ?></option>
+                    <?php
+                    // Ensure you have a valid database connection using mysqli
+                    // Assuming $conn is already established
+                    $get_func = "SELECT * FROM function";
+                    $result = mysqli_query($conn, $get_func); // Execute query
 
-<table align="center" cellspacing="20px">
-<tr align="center">
-<td colspan="8"><u><h2> User registration  </h2></u> </td>
-</tr>
-<tr>
-<td>First name:</td>
-<td><input type= "text" name ="firstname" value="<?php echo  $firstname ;?>" class="textInput"  required ></td>
-</tr>
-<tr>
-<td>Last name:</td>
-<td><input type= "text" name ="lastname" value="<?php echo  $lastname ;?>" class="textInput"  required ></td>
-</tr>
-<tr>
-<td>Phone number:</td>
-<td><input type= "text" name ="phonenumber" value="<?php echo  $phone ;?>" class="textInput" required ></td>
-</tr>
-<tr>
-<td>Email:</td>
-<td><input type= "email" name ="email" value="<?php echo  $email ;?>"  class="textInput"></td>
-</tr>
-<tr>
-<td>Function:</td>
-<td><select name="funct">
- <option value="<?php echo $funcid  ;?>"><?php echo $functions ;?></option>
-			   <?php
-				 
-				 $get_func = "select * from function";
-				 
-				 $run_func = mysql_query($get_func);
-				 
-				 while ($row_func=mysql_fetch_array($run_func)) {
-				 
-				    $function_id = $row_func['function_id'];
-					$func_title = $row_func['fcname'];
-				 
-				 echo "<option value='$function_id'> $func_title </option>";
-				
-				}
-				
-				
-				
-				?>		  
-</select></td>
-</tr>
-<tr>
-<td>Username:</td>
-<td><input type= "text" name ="username" value = "<?php echo    $username ;?>" class="textInput" required ></td>
-</tr>
-<tr>
-<td>Password:</td>
-<td><input type= "password" name ="password" value = "<?php echo   clean($password);?>"  class="textInput" required ></td>
-</tr>
-<tr>
-<td>Password again:</td>
-<td><input type= "password" name ="password2" value = "<?php echo    clean($password) ;?>"  class="textInput" required ></td>
-</tr>
-<tr>
-<td></td></tr>
-<tr align="center" >
-<td colspan="4"><input type="submit" title="Click Here to Register" id="btns" style="color: #017572;" name="updateuser_btn" value="Update User"/></td>
-<tr>
-<td><a href="viewusers.php"/>View user</a></td>
-</tr>
-</table>
+                    if ($result) {
+                        while ($row_func = mysqli_fetch_array($result)) {
+                            $function_id = $row_func['function_id'];
+                            $func_title = $row_func['fcname'];
+                            // Output each option
+                            echo "<option value='$function_id'>" . htmlspecialchars($func_title) . "</option>";
+                        }
+                        mysqli_free_result($result); // Free result set
+                    } else {
+                        echo "Error fetching data: " . mysqli_error($conn); // Handle error
+                    }
+                    ?>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Username:</td>
+            <td><input type="text" name="username" value="<?php echo htmlspecialchars($username); ?>" class="textInput" required></td>
+        </tr>
+        <tr>
+            <td>Password:</td>
+            <td><input type="password" name="password" class="textInput"></td>
+        </tr>
+        <tr>
+            <td>Confirm Password:</td>
+            <td><input type="password" name="password2" class="textInput"></td>
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
+        <tr align="center">
+            <td colspan="4">
+                <input type="submit" title="Click Here to Update" id="btns" style="color: #017572;" name="updateuser_btn" value="Update User" />
+            </td>
+        </tr>
+        <tr>
+            <td><a href="viewusers.php">View Users</a></td>
+        </tr>
+    </table>
 </form>
 
 </div>
@@ -217,36 +223,43 @@ Copyright&copy2017 Chrisaime, All Rights Reserved.
 </html>
 
 <?php
-include("includes/db.php");
-  // connect to database
-if(isset($_POST['updateuser_btn'])){
-$idu=$id;	
-$firstname=$_POST['firstname'];
-$lastname=$_POST['lastname'];
-$phone=$_POST['phonenumber'];
-$function=$_POST['funct'];
-$username = $_POST['username'];
-$email = $_POST['email'];
-$password=$_POST['password'];
-$password2=$_POST['password2'];
+include("includes/db.php"); // Assuming you have your MySQLi connection in db.php
 
-if($password==$password2) {
-	// create user
-$password = md5($password); //hash password before storing for security purposes	
-$sql ="update users set firstname = '$firstname',lastname = '$lastname',phonenumber = '$phone',email='$email',username='$username',password='$password',function_id='$function' where user_id='$idu'";
-$insert_p = mysql_query($sql);
-	 if($insert_p)
-	{
-		echo "<script>alert('User successful Updated')</script>";
-		 echo"<script>window.open('viewusers.php?updateuser','_self')</script>";
-		
-	}	
+// Check if the form is submitted
+if (isset($_POST['updateuser_btn'])) {
+    // Get user input
+    $idu = $id; // Assuming $id is defined elsewhere (e.g., from session)
+    $firstname = $_POST['firstname'];
+    $lastname = $_POST['lastname'];
+    $phone = $_POST['phonenumber'];
+    $function = $_POST['funct'];
+    $username = $_POST['username'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $password2 = $_POST['password2'];
 
-}else{
-echo "<script>alert('The two passwords do not match')</script>";
-		 echo"<script>window.open('viewusers.php?updateuser','_self')</script>";	
-	
+    // Check if passwords match
+    if ($password == $password2) {
+        // Hash the password using password_hash() (bcrypt is the default)
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+        // Create the SQL query to update the user
+        $sql = "UPDATE users 
+                SET firstname = '$firstname', lastname = '$lastname', phonenumber = '$phone', email = '$email', username = '$username', password = '$hashed_password', function_id = '$function' 
+                WHERE user_id = '$idu'";
+
+        // Execute the query using mysqli_query
+        if (mysqli_query($conn, $sql)) {
+            echo "<script>alert('User successfully updated');</script>";
+            echo "<script>window.open('viewusers.php?updateuser', '_self');</script>";
+        } else {
+            echo "<script>alert('Error updating user: " . mysqli_error($conn) . "');</script>";
+        }
+    } else {
+        // Passwords don't match
+        echo "<script>alert('The two passwords do not match');</script>";
+        echo "<script>window.open('viewusers.php?updateuser', '_self');</script>";
+    }
 }
-}
-
 ?>
+

@@ -135,24 +135,18 @@ include("includes/db.php");
 <td>Function:</td>
 <td><select name="funct">
  <option>Select Function</option>
-			   <?php
-				 
-				 $get_func = "select * from function";
-				 
-				 $run_func = mysql_query($get_func);
-				 
-				 while ($row_func=mysql_fetch_array($run_func)) {
-				 
-				    $function_id = $row_func['function_id'];
-					$func_title = $row_func['fcname'];
-				 
-				 echo "<option value='$function_id'> $func_title </option>";
-				
-				}
-				
-				
-				
-				?>		  
+			  <?php
+$get_func = "SELECT * FROM function"; 
+$run_func = mysqli_query($conn, $get_func);
+
+while ($row_func = mysqli_fetch_array($run_func)) {
+    $function_id = $row_func['function_id'];
+    $func_title = $row_func['fcname'];
+
+    echo "<option value='$function_id'>$func_title</option>";
+}
+?>
+
 </select></td>
 </tr>
 <tr>
@@ -187,35 +181,42 @@ Copyright&copy2017 Chrisaime, All Rights Reserved.
 </html>
 
 <?php
-include("includes/db.php");
-  // connect to database
-if(isset($_POST['regist_btn'])){
-$firstname=$_POST['firstname'];
-$lastname=$_POST['lastname'];
-$phone=$_POST['phonenumber'];
-$function=$_POST['funct'];
-$username = $_POST['username'];
-$email = $_POST['email'];
-$password=$_POST['password'];
-$password2=$_POST['password2'];
+include("includes/db.php"); // Ensure the database connection ($conn) is available
 
-if($password==$password2) {
-	// create user
-$password = md5($password); //hash password before storing for security purposes	
-$sql ="insert into users(firstname,lastname,phonenumber,email,username,password,function_id)values('$firstname','$lastname','$phone','$email','$username','$password','$function')";
-$insert_p = mysql_query($sql);
-	 if($insert_p)
-	{
-		echo "<script>alert('user saved')</script>";
-		 echo"<script>window.open('register.php?insertuser','_self')</script>";
-		
-	}	
+if (isset($_POST['regist_btn'])) {
+    $firstname = mysqli_real_escape_string($conn, $_POST['firstname']);
+    $lastname = mysqli_real_escape_string($conn, $_POST['lastname']);
+    $phone = mysqli_real_escape_string($conn, $_POST['phonenumber']);
+    $function = mysqli_real_escape_string($conn, $_POST['funct']);
+    $username = mysqli_real_escape_string($conn, $_POST['username']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
+    $password2 = mysqli_real_escape_string($conn, $_POST['password2']);
 
-}else{
-echo "<script>alert('The two passwords do not match')</script>";
-		 echo"<script>window.open('register.php?insertuser','_self')</script>";	
-	
+    // Check if passwords match
+    if ($password == $password2) {
+        // Hash the password using password_hash() for better security
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+        // Insert the user into the database
+        $sql = "INSERT INTO users (firstname, lastname, phonenumber, email, username, password, function_id) 
+                VALUES ('$firstname', '$lastname', '$phone', '$email', '$username', '$hashed_password', '$function')";
+
+        // Execute the query
+        $insert_p = mysqli_query($conn, $sql);
+
+        if ($insert_p) {
+            echo "<script>alert('User successfully saved')</script>";
+            echo "<script>window.open('register.php?insertuser', '_self')</script>";
+        } else {
+            echo "<script>alert('Error: Unable to save user.')</script>";
+            echo "<script>window.open('register.php?insertuser', '_self')</script>";
+        }
+    } else {
+        echo "<script>alert('The two passwords do not match')</script>";
+        echo "<script>window.open('register.php?insertuser', '_self')</script>";
+    }
 }
-}
-
 ?>
+
+

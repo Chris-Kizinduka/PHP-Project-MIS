@@ -1,20 +1,27 @@
 <!DOCTYPE>
+
 <?php
-include("includes/db.php");
-if(isset($_GET['edit_supplier']))
-{
-	
-	$get_id=$_GET['edit_supplier'];
-	$get_s="select * from supplier where supplier_id='$get_id'";
-	$run_s=mysql_query($get_s);
-	$row_s=mysql_fetch_array($run_s);
-	$sid =$row_s['supplier_id'];
-        $s_name =$row_s['suppliername'];
-        $phn =$row_s['phone_number'];
-		$ad =$row_s['Address'];
-		$em =$row_s['Email'];
+include("includes/db.php"); // Ensure this file contains the correct mysqli connection ($conn)
+
+if (isset($_GET['edit_supplier'])) {
+    $get_id = $_GET['edit_supplier'];
+
+    // Use mysqli_query instead of mysql_query
+    $get_s = "SELECT * FROM supplier WHERE supplier_id='$get_id'";
+    $run_s = mysqli_query($conn, $get_s);
+
+    // Use mysqli_fetch_array instead of mysql_fetch_array
+    if ($row_s = mysqli_fetch_array($run_s)) {
+        $sid = $row_s['supplier_id'];
+        $s_name = $row_s['suppliername'];
+        $phn = $row_s['phone_number'];
+        $ad = $row_s['Address'];
+        $em = $row_s['Email'];
+    }
 }
 ?>
+
+
 <html>
 <head>
 <title> COTAMONYA MIS</title>
@@ -157,22 +164,28 @@ Copyright&copy2017 Chrisaime, All Rights Reserved.
 </body>
 </html>
 <?php
-if(isset($_POST['sup_btn']))
-{
+if (isset($_POST['sup_btn'])) {
+    $sup_id = $_POST['supplier_id']; // Ensure this field is included in your form
+    $s_name = $_POST['suppliername'];
+    $phne = $_POST['phone_number'];
+    $ad = $_POST['Address'];
+    $email = $_POST['Email'];
 
-$sup_id=$sid;
-$s_name = $_POST['suppliername'];
-$phne = $_POST['phone_number'];
-$ad = $_POST['Address'];
-$email = $_POST['Email'];
-$update_supplier="update supplier set suppliername='$s_name',phone_number='$phne',Address='$ad',Email='$email' where supplier_id='$sup_id'";
- $run_sup=mysql_query($update_supplier);
- if( $run_sup)
- {
- echo"<script>alert('Supplier Has Been Updated!')</script>";
- echo"<script>window.open('viewsupplier.php','_self')</script>";
+    // Direct SQL query (no prepare, but be cautious of SQL injection risks)
+    $update_supplier = "UPDATE supplier SET 
+                        suppliername='$s_name', 
+                        phone_number='$phne', 
+                        Address='$ad', 
+                        Email='$email' 
+                        WHERE supplier_id='$sup_id'";
 
- }
+    $run_sup = mysqli_query($conn, $update_supplier);
+
+    if ($run_sup) {
+        echo "<script>alert('Supplier Has Been Updated!')</script>";
+        echo "<script>window.open('viewsupplier.php','_self')</script>";
+    } else {
+        echo "<script>alert('Error updating supplier: " . mysqli_error($conn) . "')</script>";
+    }
 }
-
 ?>

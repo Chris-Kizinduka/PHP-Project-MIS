@@ -63,65 +63,71 @@ function myfunction()
 		
 		  </thead> 
 		   <tbody>
-		<?php  
+<?php  
 
-		$sum=0;
-		$sum1=0;
-	    $sum2=0;
-		$sum3=0;
-			$query = mysql_query("SELECT moto_payment.moto_pay_id,sum(moto_payment.paid_amount)as mptot,moto_payment.dueamount,count(moto_payment.leasing_id) as cpay ,moto_payment.leasing_id,leasing.member_id,member.fname,member.lname,member.m_image,member.phone_number,member.function,moto.plate_number,moto.property_value FROM moto_payment JOIN leasing ON moto_payment.leasing_id = leasing.leasing_id  left outer join member ON leasing.member_id = member.member_id left join moto on leasing.moto_id = moto.moto_id GROUP BY moto_payment.leasing_id ");
-			while($row = mysql_fetch_array($query))
-			{
-				
-				$mid=$row['member_id'];
-				$mm = $row['fname'];
-				$ml= $row['lname'];
-				$mimage=$row['m_image'];
-				$mfc=$row['function'];
-				$mphn=$row['phone_number'];
-				$lid=$row['leasing_id'];
-				$pv=$row['property_value'];
-				$pn=$row['plate_number'];
-                $sumpaid=$row['mptot'];
-				$sum2=$sum2+$sumpaid;
-                $countpay=$row['cpay'];
-				$dam=$row['dueamount'];
-				$mt = $dam-$sumpaid;
-				$sum3=$sum3+$mt;
-				$ext=$dam-$pv;
-				$sum1=$sum1+$ext;
-				$profit=$sumpaid-$pv;
-				$sum=$sum+$profit;
-				
-			?>
-			
-			<tr colspan="5">
-			<td><?php echo $mid;?></td>
-			<td><?php echo $mm ;?>  <?php echo $ml ;?></td>
-			<td><img src="members/<?php echo $mimage; ?>" width="50" height="50"> </td>
-			<td><?php echo $mphn;?></td>
-			<td><?php echo $mfc;?></td>
-			<td><?php echo $lid;?></td>
-			<td><?php echo $pn; ?> </td>
-			<td><?php echo $pv; ?> </td>
-			<td><?php echo $dam; ?> </td>
-			<td><?php echo $sumpaid;?></td>
-			<td><?php echo $mt; ?> </td>
-		    <td><?php echo $countpay;?> Day(s)</td>
-			<td><?php echo $profit;?></td>
-			<td><?php echo $ext; ?> </td>
-			
-			</tr>
-		
- <?php }?>
-   <tr style="background:#b9c9fe url('table-images/gradhead.png') repeat-x;">
+$sum = 0;
+$sum1 = 0;
+$sum2 = 0;
+$sum3 = 0;
 
-<?php 
+// Replacing mysql_* with mysqli_*
+$query = mysqli_query($conn, "SELECT moto_payment.moto_pay_id, sum(moto_payment.paid_amount) AS mptot, moto_payment.dueamount, 
+                             count(moto_payment.leasing_id) AS cpay, moto_payment.leasing_id, leasing.member_id, 
+                             member.fname, member.lname, member.m_image, member.phone_number, member.function, 
+                             moto.plate_number, moto.property_value 
+                             FROM moto_payment 
+                             JOIN leasing ON moto_payment.leasing_id = leasing.leasing_id  
+                             LEFT OUTER JOIN member ON leasing.member_id = member.member_id 
+                             LEFT JOIN moto ON leasing.moto_id = moto.moto_id 
+                             GROUP BY moto_payment.leasing_id");
+
+while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
+
+    $mid = $row['member_id'];
+    $mm = $row['fname'];
+    $ml = $row['lname'];
+    $mimage = $row['m_image'];
+    $mfc = $row['function'];
+    $mphn = $row['phone_number'];
+    $lid = $row['leasing_id'];
+    $pv = $row['property_value'];
+    $pn = $row['plate_number'];
+    $sumpaid = $row['mptot'];
+    $sum2 = $sum2 + $sumpaid;
+    $countpay = $row['cpay'];
+    $dam = $row['dueamount'];
+    $mt = $dam - $sumpaid;
+    $sum3 = $sum3 + $mt;
+    $ext = $dam - $pv;
+    $sum1 = $sum1 + $ext;
+    $profit = $sumpaid - $pv;
+    $sum = $sum + $profit;
+?>
+    <tr colspan="5">
+        <td><?php echo $mid; ?></td>
+        <td><?php echo $mm . " " . $ml; ?></td>
+        <td><img src="members/<?php echo $mimage; ?>" width="50" height="50"> </td>
+        <td><?php echo $mphn; ?></td>
+        <td><?php echo $mfc; ?></td>
+        <td><?php echo $lid; ?></td>
+        <td><?php echo $pn; ?> </td>
+        <td><?php echo $pv; ?> </td>
+        <td><?php echo $dam; ?> </td>
+        <td><?php echo $sumpaid; ?></td>
+        <td><?php echo $mt; ?> </td>
+        <td><?php echo $countpay; ?> Day(s)</td>
+        <td><?php echo $profit; ?></td>
+        <td><?php echo $ext; ?> </td>
+    </tr>
+<?php } ?>
+    <tr style="background:#b9c9fe url('table-images/gradhead.png') repeat-x;">
+	
+	<?php 
 
 
 
 ?>
-<td>
+        <td>
 </td><td>
 </td><td>
 </td><td>
@@ -129,36 +135,35 @@ function myfunction()
 </td><td>
 </td><td>
 </td><td>
-</td colspan="8"><td>
-</td>
-<td style="text-align:left; font-size:14px ;" >
-<h1><u><b>TOT:</b><?php echo $sum2 ?>frw</u></h1>
-</td>
-<td style="text-align:left; font-size:14px ; color:red;" >
-<h1><u><b>TOT:</b><?php echo $sum3 ?>frw</u></h1>
-</td><td>
-</td>
-<td style="text-align:left; font-size:14px ;" >
-<h1><u>TOT:</b><?php echo $sum ?>frw</u></h1>
-</td>
-<td style="text-align:left; font-size:14px ; " >
-<h1><u>TOT:<?php echo $sum1 ?>frw</u></h1>
-</td>
-</tr>
+        </td colspan="8"><td>
+		</td>
+            <td style="text-align:left; font-size:14px;">
+                <h1><u><b>TOT:</b> <?php echo $sum2; ?> frw</u></h1>
+            </td>
+            <td style="text-align:left; font-size:14px; color:red;">
+                <h1><u><b>TOT:</b> <?php echo $sum3; ?> frw</u></h1>
+            </td>
+            <td></td>
+            <td style="text-align:left; font-size:14px;">
+                <h1><u><b>TOT:</b> <?php echo $sum; ?> frw</u></h1>
+            </td>
+            <td style="text-align:left; font-size:14px;">
+                <h1><u><b>TOT:</b> <?php echo $sum1; ?> frw</u></h1>
+            </td>
+        </tr>
+</tbody>
 
-
-   
-			</tbody>
 			
 			</table>	
 <div class="pull-right">
-								
-								<h4>Done on <?php
-								$Today = date('y:m:d');
-								$new = date('l, F d, Y', strtotime($Today));
-								echo $new;
-								?></h4>
-		</div>
+    <h4>Done on 
+        <?php
+        // Get the current date in proper format
+        echo date('l, F d, Y'); 
+        ?>
+    </h4>
+</div>
+
 </div>
 
 		</form>	
